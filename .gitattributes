@@ -2,5 +2,3 @@
 *.rar filter=lfs diff=lfs merge=lfs -text
 *.tar filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
-demo/detection_mmdet_test/rtmdet_tiny_8xb32-300e_coco_20220902_112414-78e30dcc.pth
-demo/classification_timm_test1/caformer_s36.sail_in22k_ft_in1k.tar
