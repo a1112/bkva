@@ -11,11 +11,13 @@ parser.add_argument('--config', required=True, type=str, help='yaml config file'
 args = parser.parse_args()
 
 
-def main(args):
-    director = crate_director(args.config)
+def main(args_):
+    director = crate_director(args_.config)
     try:
-        for results in tqdm(director):
+        tq = tqdm()
+        for results in director:
             for result in results:
+                tq.update(1)
                 if director.property.show:
                     result.show()
                 if director.property.save:

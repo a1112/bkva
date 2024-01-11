@@ -1,10 +1,10 @@
-from pathlib import Path
+import os.path
 
 import BKVisionAlgorithms.classification
 import BKVisionAlgorithms.detection
 from BKVisionAlgorithms.base import SingModelAll
-from BKVisionAlgorithms.base.property import DetectionProperty, BaseProperty, ImageFolderLoader, ImageDetectionDirector, \
-    DirectorFactoryBase, ImageAdjustBase, ImageAdjustSplit
+from BKVisionAlgorithms.base.property import DetectionProperty, BaseProperty, ImageFolderLoader, \
+    ImageDetectionDirector,DirectorFactoryBase, ImageAdjustBase, ImageAdjustSplit
 
 
 def register_model():
@@ -33,21 +33,29 @@ def get_model_list():
 
 def create_loader(property_: BaseProperty):
     if isinstance(property_.loader, str):
-        return ImageFolderLoader(Path(property_.loader), property_=property_)
-    elif isinstance(property_.loader, dict):
+        property_.loader = {
+            "type": "folder",
+            "path": property_.loader
+        }
+    if isinstance(property_.loader, dict):
+
         if property_.loader.get("type").lower() == "folder":
-            return ImageFolderLoader(Path(property_.loader.get("path")), property_=property_)
+
+            if "recursion" not in property_.loader:
+                property_.loader["recursion"] = property_.recursion
+            property_.loader["path"] = os.path.join(property_.dir_path, property_.loader["path"])
+            return ImageFolderLoader(property_=property_)
     return None
 
 
 def create_adjust(property_: BaseProperty):
     if isinstance(property_.adjust, str):
         if property_.adjust.lower() == "split":
-            return ImageAdjustSplit()
-    return ImageAdjustBase()
+            return ImageAdjustSplit(property_)
+    return ImageAdjustBase(property_)
 
 
-def crate_director(yaml_, loader=None,model=None,adjust=None) -> DirectorFactoryBase:
+def crate_director(yaml_, loader=None, model=None, adjust=None) -> DirectorFactoryBase:
     assert yaml_, "yaml_path is required"
     property_ = crate_property(yaml_)
     if not model:

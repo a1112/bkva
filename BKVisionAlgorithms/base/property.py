@@ -67,6 +67,8 @@ class BaseProperty(object):
             pass
         self.names = _getNames_(_names_)
         self.type = self.yaml_dict.get('type', None)
+        self.batch_size = self.yaml_dict.get('batch-size', 16)
+
         self.device = self.yaml_dict.get('device', 'cpu')
         self.use_cuda = not self.device == 'cpu'
 
@@ -86,6 +88,7 @@ class BaseProperty(object):
         self.save_dir = self.yaml_dict.get('save-dir', None)
         self.save_label = self.yaml_dict.get('save-label', False)
         self.save_null = self.yaml_dict.get('save-null', True)
+        self.recursion = self.yaml_dict.get('recursion', True)
 
     def __repr__(self):
         return self.__str__()
@@ -131,11 +134,13 @@ class ClassificationProperty(BaseProperty):
         return self.__str__()
 
     def __str__(self):
-        return (f"ClassificationProperty(name={self.name},type={self.type},device={self.device},use_cuda={self.use_cuda},"
-                f"weights={self.weights},weights_full_path={self.weights_full_path},num_classes={self.num_classes},"
-                f"framework={self.framework},debug={self.debug},loader={self.loader},adjust={self.adjust},"
-                f"showType={self.showType},save={self.save},save_dir={self.save_dir},save_label={self.save_label},"
-                f"save_null={self.save_null})")
+        return (
+            f"ClassificationProperty(name={self.name},type={self.type},device={self.device},use_cuda={self.use_cuda},"
+            f"weights={self.weights},weights_full_path={self.weights_full_path},num_classes={self.num_classes},"
+            f"framework={self.framework},debug={self.debug},loader={self.loader},adjust={self.adjust},"
+            f"showType={self.showType},save={self.save},save_dir={self.save_dir},save_label={self.save_label},"
+            f"save_null={self.save_null})")
+
 
 # --------------------- Result -----------------------
 class BaseResult(ABC):
@@ -362,8 +367,9 @@ class BaseClassificationModel(BaseModel):
 
 # --------------------- Loader -----------------------
 class ImageLoaderInterface(ABC):
-    def __init__(self):
-        self.item_type = 'pil'
+    def __init__(self,property_: BaseProperty):
+        self.property = property_
+        self.item_type = "pil"
         atexit.register(self.close)
 
     @abstractmethod
@@ -380,18 +386,15 @@ class ImageLoaderInterface(ABC):
 
 
 class ImageFolderLoader(ImageLoaderInterface):
-    def __init__(self, folder_path=None, recursion=False, remove=True, property_=None):
-        super().__init__()
-        self.remove = remove
-        self.recursion = recursion
-        self.folder_path = folder_path if folder_path else property_.folder_path
+    def __init__(self,property_:BaseProperty,folder_path=None):
+        super().__init__(property_)
+        self.remove = self.property.loader.get('remove', False)
+        self.recursion = self.property.loader.get('recursion', True)
+        self.folder_path = folder_path or property_.loader.get('path', None)
         self.image_queue = queue.Queue(maxsize=100)
         self.delete_queue = queue.Queue()
         self.scanned_files = set()
         self.stop_loading = False
-
-        # if property_:
-        #     self.item_type = property_.remove
 
         self.loader_thread = threading.Thread(target=self._load_images)
         self.deleter_thread = threading.Thread(target=self._delete_files)
@@ -523,10 +526,6 @@ class ImageAdjustInterface(ABC):
     def adjustAfter(self, results: list[BaseResult]):
         ...
 
-    @abstractmethod
-    def setProperty(self, property_):
-        ...
-
 
 class ImageAdjustBase(ImageAdjustInterface):
     """
@@ -534,27 +533,33 @@ class ImageAdjustBase(ImageAdjustInterface):
     ImageAdjust classes.
     """
 
-    def __init__(self):
+    def __init__(self, property_: BaseProperty):
         super().__init__()
-        self.property = None
-        self.property: BaseProperty
-        self.file_path = None
+        self.property: BaseProperty = property_
+        self.batch_size = self.property.batch_size
+        self.file_path_list = []
+        self.image_list = []
 
     def adjust(self, imageLoder: ImageLoaderInterface):
-        self.file_path, image = next(imageLoder)
-        if not isinstance(image, Image.Image):
-            image = Image.fromarray(image)
-        if not isinstance(image, list):
-            image = [image]
-        return image
+        try:
+            self.file_path_list = []
+            self.image_list = []
+            while len(self.image_list) < self.batch_size:
+                file_path, image = next(imageLoder)
+                if isinstance(image, np.ndarray):
+                    image = Image.fromarray(image)
+                self.file_path_list.append(file_path)
+                self.image_list.append(image)
+        except StopIteration:
+            if len(self.image_list) == 0:
+                raise StopIteration
+        return self.image_list
 
     def adjustAfter(self, results: list[BaseResult]):
-        for index, result in enumerate(results):
-            result.file_path = self.file_path
+        for result, file_path,image in zip(results, self.file_path_list,self.image_list):
+            result.file_path = file_path
+            result.image = image
         return results
-
-    def setProperty(self, property_: BaseProperty):
-        self.property = property_
 
 
 class ImageAdjustSplit(ImageAdjustBase):
@@ -562,41 +567,53 @@ class ImageAdjustSplit(ImageAdjustBase):
     ImageAdjust is a concrete class that implements the ImageAdjustBase interface.
     """
 
-    def __init__(self):
+    def __init__(self,property_):
         self.image = None
         self.splitNum = 4
-        super().__init__()
-
-    def setProperty(self, property_: BaseProperty):
-        self.property = property_
+        super().__init__(property_)
         if hasattr(property_, "splitNum"):
             self.splitNum = property_.splitNum
 
     def adjust(self, imageLoder: ImageLoaderInterface):
-        self.file_path, image = next(imageLoder)
-        self.image = image
-        width, height = image.size
+        try:
+            self.file_path_list = []
+            self.image_list = []
+            while len(self.image_list) < self.batch_size:
+                file_path, image = next(imageLoder)
+                if isinstance(image, np.ndarray):
+                    image = Image.fromarray(image)
+                self.file_path_list.append(file_path)
+                self.image_list.append(image)
+        except StopIteration:
+            if len(self.image_list) == 0:
+                raise StopIteration
+        width, height = self.image_list[0].size
         new_width = width // self.splitNum
         images = []
-        for i in range(self.splitNum):
-            left = i * new_width
-            right = (i + 1) * new_width
-            images.append(image.crop((left, 0, right, height)))
+        for image in self.image_list:  # crop image
+            for i in range(self.splitNum):
+                left = i * new_width
+                right = (i + 1) * new_width
+                images.append(image.crop((left, 0, right, height)))
         return images
 
     def adjustAfter(self, results: list[BaseResult]):
-        result = DetectionResult(self.property, results)
-        newXyxy = []
-        for index, result in enumerate(results):
-            for box in result.xyxy:
-                box[0] += index * (result.image.size[0])
-                box[2] += index * (result.image.size[0])
-                newXyxy.append(box)
-        result.xyxy = newXyxy
-        result.image = self.image
-        result.file_path = self.file_path
-        self.property: DetectionProperty
-        return [result]
+
+        result_list = []
+        result_array = [results[i:i + self.splitNum] for i in range(0, len(results), self.splitNum)]
+        for result_array_item, image, file_path in zip(result_array, self.image_list, self.file_path_list):
+            result = DetectionResult(self.property, result_array_item)
+            newXyxy = []
+            for index, result in enumerate(result_array_item):
+                for box in result.xyxy:
+                    box[0] += index * (image.size[0] // self.splitNum)
+                    box[2] += index * (image.size[0] // self.splitNum)
+                    newXyxy.append(box)
+            result.xyxy = newXyxy
+            result.image = image
+            result.file_path = file_path
+            result_list.append(result)
+        return result_list
 
     def __enter__(self):
         # 在这里添加进入 with 块时的初始化代码
@@ -638,12 +655,11 @@ class DirectorFactoryInterFace(ABC):
 
     def __init__(self, imageLoader, model, adjust: ImageAdjustBase = None):
         if not adjust:
-            adjust = ImageAdjustBase()
+            adjust = ImageAdjustBase(model.property)
         self.property = model.property
         self.loader = imageLoader
         self.model = model
         self.adjust = adjust
-        self.adjust.setProperty(self.model.property)
 
     @abstractmethod
     def __iter__(self):

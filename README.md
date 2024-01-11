@@ -35,9 +35,9 @@ import BKVisionalgorithms as bkva
 
 ## 使用 demo.py 快速运行
     
-    ```bash
-    python demo.py --config=demo/detection_yolov5_test1 
-    ```
+```bash
+python demo.py --config=demo/detection_yolov5_test1 
+```
 yaml 显示/隐藏 关键参数
 
 ```yaml
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     property_ = DetectionProperty("../demo/detection_yolov5_test1")
     detectionModel = crate_model(property_)
     imageFolderLoader = ImageFolderLoader(r"E:\clfData\鼎信\分割\image", remove=False)
-    director = ImageDetectionDirector(imageFolderLoader, detectionModel, ImageAdjustSplit())
+    director = ImageDetectionDirector(imageFolderLoader, detectionModel, ImageAdjustSplit(property_))
     for results in tqdm(director):
         for result in results:
             result: DetectionResult
@@ -124,8 +124,6 @@ if __name__ == "__main__":
 例： config.yaml
 
 ```yaml
-#--encoding:utf-8--
-
 #--encoding:utf-8--
 
 type: detection # detection or classification or segmentation
@@ -182,19 +180,8 @@ matplotlib~=3.8.2
 pandas~=2.1.4
 seaborn~=0.13.1
 scipy~=1.11.4
-Flask~=2.3.2
-thop~=0.1.1.post2209072238
 addict~=2.4.0
 pytest~=7.4.4
-shapely~=2.0.2
-mmcv~=2.1.0
-mmengine~=0.10.2
-mmdet~=3.2.0
-rich~=13.4.2
-six~=1.16.0
-terminaltables~=3.1.10
-Jinja2~=3.1.2
-safetensors~=0.4.0
 filetype~=1.2.0
 lxml
 ```
