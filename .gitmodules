@@ -1,0 +1,3 @@
+[submodule "git/defection"]
+	path = git/defection
+	url = https://github.com/open-mmlab/mmdetection
