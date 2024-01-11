@@ -1,5 +1,7 @@
 import argparse
 
+from tqdm import tqdm
+
 from BKVisionAlgorithms import crate_director
 
 parser = argparse.ArgumentParser(description="BKVision Test program description")
@@ -12,12 +14,12 @@ args = parser.parse_args()
 def main(args):
     director = crate_director(args.config)
     try:
-        for results in director:
+        for results in tqdm(director):
             for result in results:
                 if director.property.show:
                     result.show()
-                # if args.output:
-                #     result.save(args.output)
+                if director.property.save:
+                    result.save()
     except KeyboardInterrupt:
         raise KeyboardInterrupt
     finally:
@@ -28,4 +30,4 @@ assert args.config, "config file is required"
 
 if __name__ == "__main__":
     main(args)
-    "python test.py --config=demo/detection_yolov5_test1"
+    "python demo.py --config=demo/detection_yolov5_test1"

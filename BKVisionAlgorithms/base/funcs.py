@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import xml.etree.cElementTree as ET
 
 
@@ -38,8 +40,61 @@ def filter_boxes(boxes, threshold):
 
     return filtered_boxes
 
+def save_coco_labels(detections, save_url, width, height, filename, path="", depth=3, names=None):
+    save_url = Path(save_url)
+    if save_url.is_dir():
+        save_url = (save_url / filename)
+    save_url = save_url.with_suffix(".json")
+    import json
+    json_data = {
+        "version": "4.5.9",
+        "flags": {},
+        "shapes": [],
+        "imagePath": filename,
+        "imageData": None,
+        "imageHeight": height,
+        "imageWidth": width
+    }
+    for det_ in detections:
+        x1, y1, x2, y2,conf,cls = det_
+        if names:
+            cls = names[int(cls)]
+        det = {
+            "label": cls,
+            "points": [[x1, y1], [x2, y2]],
+            "group_id": None,
+            "shape_type": "rectangle",
+            "flags": {}
+        }
+        json_data["shapes"].append(det)
+    with open(save_url, "w") as f:
+        json.dump(json_data, f)
 
-def create_voc_xml(detections, save_url, width, height, filename, path="", depth=3):
+
+def save_yolo_labels(detections, save_url, width, height, filename, path="", depth=3, names=None):
+    save_url = Path(save_url)
+    if save_url.is_dir():
+        save_url = (save_url / filename)
+    save_url = save_url.with_suffix(".txt")
+    with open(save_url, "w") as f:
+        for det_ in detections:
+            x1, y1, x2, y2,conf,cls = det_
+            if names:
+                cls = names[int(cls)]
+            det = {
+                "label": cls,
+                "points": [[x1, y1], [x2, y2]],
+                "group_id": None,
+                "shape_type": "rectangle",
+                "flags": {}
+            }
+            f.write(f"{cls} {x1} {y1} {x2} {y2}\n")
+
+def save_voc_labels(detections, save_url, width, height, filename, path="", depth=3, names=None):
+    save_url = Path(save_url)
+    if save_url.is_dir():
+        save_url = (save_url / filename)
+    save_url = save_url.with_suffix(".xml")
     annotation = ET.Element("annotation")
     ET.SubElement(annotation, "filename").text = filename
     ET.SubElement(annotation, "path").text = path
@@ -52,7 +107,19 @@ def create_voc_xml(detections, save_url, width, height, filename, path="", depth
     ET.SubElement(size, "height").text = str(height)
     ET.SubElement(size, "depth").text = str(depth)
 
-    for det in detections:
+    for det_ in detections:
+        x1, y1, x2, y2,conf,cls = det_
+        if names:
+            cls = names[int(cls)]
+        det = {
+            "name": cls,
+            "truncated": 0,
+            "difficult": 0,
+            "xmin": x1,
+            "ymin": y1,
+            "xmax": x2,
+            "ymax": y2,
+        }
         obj = ET.SubElement(annotation, "object")
         ET.SubElement(obj, "name").text = det['name']
         ET.SubElement(obj, "pose").text = "Unspecified"

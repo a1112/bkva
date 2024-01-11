@@ -33,6 +33,27 @@ python setup.py install
 import BKVisionalgorithms as bkva
 ```
 
+## 使用 demo.py 快速运行
+    
+    ```bash
+    python demo.py --config=demo/detection_yolov5_test1 
+    ```
+yaml 显示/隐藏 关键参数
+
+```yaml
+show: false         # show results
+show-type: cv2    # cv2 or pillow
+loader: E:\clfData\鼎信\分割\image # image folder  input
+adjust: split # H split
+save: true # save image
+save-dir: E:\clfData\鼎信\分割\output # output folder
+save-label: true # save label
+# if set save-label true, don't draw label on image
+
+save-null: true # save null label image
+```
+
+
 ### 使用示例1 图像分类
 
 ```python
@@ -105,18 +126,20 @@ if __name__ == "__main__":
 ```yaml
 #--encoding:utf-8--
 
-type: detection
-name: yolov5s
-weights: yolov5s.pt
-names: Steel_RZ.yaml    # dataset labels :
-#  names: ['__background__', 'tuopi', 'bahen', 'jiaza', 'yiwuyaru', 'huashang', 'bianlie', 'yanghuatiepi',
-#   'gunyin', 'liewen', 'daitougunyin', 'qipi', 'shezhuangqipi', 'zhalan']
+#--encoding:utf-8--
 
-img-size: 640       # inference size (pixels)
+type: detection # detection or classification or segmentation
+
+framework: yolov5
+weights: yolov5s.pt
+names: Steel_RZ.yaml    # dataset labels
+
+
+img-size: 1024       # inference size (pixels)
 conf-thres: 0.25    # confidence threshold
 iou-thres: 0.45     # NMS IoU threshold
 max-det: 1000       # maximum detections per image
-device: 0           # cuda device, i.e. 0 or 0,1,2,3 or cpu
+device: cuda:0           # cuda device, i.e. 0 or 0,1,2,3 or cpu
 view-img: false     # show results
 save-txt: true      # save results to *.txt
 save-conf: true     # save confidences in --save-txt labels
@@ -125,6 +148,14 @@ nosave: false       # do not save images/videos
 batch-size: 32      # inference batch size
 
 debug: true        # debug mode
+show: false         # show results
+show-type: cv2
+loader: E:\clfData\鼎信\分割\image # image folder  input
+adjust: split # H split
+save: true # save image
+save-dir: E:\clfData\鼎信\分割\output # output folder
+save-label: true # save label
+save-null: true # save null label
 ```
 
 # 依赖

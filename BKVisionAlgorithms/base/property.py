@@ -15,7 +15,7 @@ import yaml
 from PIL import Image, UnidentifiedImageError, ImageDraw, ImageFont
 
 from BKVisionAlgorithms import CONFIG
-from BKVisionAlgorithms.base.funcs import filter_boxes
+from BKVisionAlgorithms.base.funcs import filter_boxes, save_voc_labels
 
 
 # --------------------- Property -----------------------
@@ -37,11 +37,9 @@ class BaseProperty(object):
         if os.path.isdir(yaml_path):
             yaml_path = os.path.join(yaml_path, "config.yaml")
         self.dir_path = os.path.dirname(yaml_path)
-
         if os.path.exists(yaml_path) is False:
             raise FileNotFoundError(f"File {yaml_path} not found")
         self.yaml_path = yaml_path
-        print(self.yaml_path)
         self.yaml_dict = _load_yaml(self.yaml_path)
 
         def _getNames_(names_url):
@@ -78,18 +76,26 @@ class BaseProperty(object):
         self.num_classes = self.yaml_dict.get('num_classes', -1)
 
         self.framework = self.yaml_dict.get('framework', None)
-        print(self.yaml_dict)
-
-        self.save = self.yaml_dict.get('save', False)
 
         self.debug = self.yaml_dict.get('debug', False)
 
         self.loader = self.yaml_dict.get('loader', None)
         self.adjust = self.yaml_dict.get('adjust', None)
         self.showType = self.yaml_dict.get('show-type', 'pillow')
+        self.save = self.yaml_dict.get('save', False)
+        self.save_dir = self.yaml_dict.get('save-dir', None)
+        self.save_label = self.yaml_dict.get('save-label', False)
+        self.save_null = self.yaml_dict.get('save-null', True)
 
     def __repr__(self):
         return self.__str__()
+
+    def __str__(self):
+        return (f"BaseProperty(name={self.name},type={self.type},device={self.device},use_cuda={self.use_cuda},"
+                f"weights={self.weights},weights_full_path={self.weights_full_path},num_classes={self.num_classes},"
+                f"framework={self.framework},debug={self.debug},loader={self.loader},adjust={self.adjust},"
+                f"showType={self.showType},save={self.save},save_dir={self.save_dir},save_label={self.save_label},"
+                f"save_null={self.save_null})")
 
 
 class DetectionProperty(BaseProperty):
@@ -103,6 +109,17 @@ class DetectionProperty(BaseProperty):
         self.conf_thres = self.yaml_dict.get("conf-thres", 0.3)
         self.iou_thres = self.yaml_dict.get("iou-thres", 0.45)
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return (f"DetectionProperty(name={self.name},type={self.type},device={self.device},use_cuda={self.use_cuda},"
+                f"weights={self.weights},weights_full_path={self.weights_full_path},num_classes={self.num_classes},"
+                f"framework={self.framework},debug={self.debug},loader={self.loader},adjust={self.adjust},"
+                f"showType={self.showType},save={self.save},save_dir={self.save_dir},save_label={self.save_label},"
+                f"save_null={self.save_null},show={self.show},show_all={self.show_all},save_all={self.save_all},"
+                f"conf_thres={self.conf_thres},iou_thres={self.iou_thres})")
+
 
 class ClassificationProperty(BaseProperty):
     def __init__(self, yaml_path: str):
@@ -110,11 +127,20 @@ class ClassificationProperty(BaseProperty):
         super().__init__(yaml_path)
         self.save_dir = self.yaml_dict.get("save-dir" f"runs/classification/{self.name}")
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return (f"ClassificationProperty(name={self.name},type={self.type},device={self.device},use_cuda={self.use_cuda},"
+                f"weights={self.weights},weights_full_path={self.weights_full_path},num_classes={self.num_classes},"
+                f"framework={self.framework},debug={self.debug},loader={self.loader},adjust={self.adjust},"
+                f"showType={self.showType},save={self.save},save_dir={self.save_dir},save_label={self.save_label},"
+                f"save_null={self.save_null})")
 
 # --------------------- Result -----------------------
 class BaseResult(ABC):
     def __init__(self, property_):
-        self.file_path = None
+        self._file_path_ = None
         self.property = property_
         self.property: BaseProperty
         self._image_ = None
@@ -129,8 +155,13 @@ class BaseResult(ABC):
             image = Image.fromarray(image)
         self._image_ = image
 
-    def setFilePath(self, file_path: str):
-        self.file_path = file_path
+    @property
+    def file_path(self):
+        return self._file_path_
+
+    @file_path.setter
+    def file_path(self, file_path):
+        self._file_path_ = file_path
 
     @abstractmethod
     def save(self, save_path=None):
@@ -194,23 +225,29 @@ class DetectionResult(BaseResult):
         return draw
 
     def saveXml(self, save_path=None):
-        pass
-
-    def _save_(self, save_path=None):
-        if isinstance(self.image, np.ndarray):
-            self.image = Image.fromarray(self.image)
-        if not self.drawImage:
-            self.drawImage = self._draw_()
-        assert self.image is not None
-        savef = Path(save_path) / Path(self.file_path).name
-        savef.parent.mkdir(parents=True, exist_ok=True)
-        self.image.save(str(savef))
+        save_voc_labels(self.xyxy, save_path, *self.image.size, Path(self.file_path).name, names=self.property.names)
 
     def save(self, save_path=None):
-        return self._save_(save_path)
-
-    def setFilePath(self, file_path: str):
-        self.file_path = file_path
+        save_path = save_path or self.property.save_dir
+        # 将image从numpy数组转换为PIL图像（如果需要）
+        if isinstance(self.image, np.ndarray):
+            self.image = Image.fromarray(self.image)
+        # 设置图像保存
+        image = self.drawImage if (not self.property.save_label and not self.drawImage) else self.image
+        # 如果不保存空对象且没有对象，则直接返回
+        if not self.property.save_null and not self.hasObject():
+            return
+        # 构建保存路径
+        save_url = Path(save_path) / Path(self.file_path).name
+        if self.property.save_all and not self.hasObject():
+            save_url = Path(save_path) / "null" / Path(self.file_path).name
+        # 创建保存目录
+        save_url.parent.mkdir(parents=True, exist_ok=True)
+        # 保存图像
+        image.save(str(save_url))
+        # 如果需要保存标签且有对象，则保存XML
+        if self.property.save_label and self.hasObject():
+            self.saveXml(save_url.parent)
 
 
 class ClassificationResult(BaseResult):
@@ -385,13 +422,16 @@ class ImageFolderLoader(ImageLoaderInterface):
                     if image is not None:
                         while True:
                             try:
-                                self.image_queue.put((image, file),timeout=1)
+                                self.image_queue.put((image, file), timeout=1)
                                 break
                             except queue.Full:
                                 if self.stop_loading:
                                     return
                 except UnidentifiedImageError:
                     self.delete_queue.put(file)
+            if not self.remove:
+                self.stop_loading = True
+                return
             time.sleep(0.1)
 
     def _delete_files(self):
@@ -510,7 +550,7 @@ class ImageAdjustBase(ImageAdjustInterface):
 
     def adjustAfter(self, results: list[BaseResult]):
         for index, result in enumerate(results):
-            result.setFilePath(Path(self.file_path))
+            result.file_path = self.file_path
         return results
 
     def setProperty(self, property_: BaseProperty):
@@ -546,7 +586,6 @@ class ImageAdjustSplit(ImageAdjustBase):
 
     def adjustAfter(self, results: list[BaseResult]):
         result = DetectionResult(self.property, results)
-        result.setFilePath(str(Path(self.file_path)))
         newXyxy = []
         for index, result in enumerate(results):
             for box in result.xyxy:
@@ -555,6 +594,7 @@ class ImageAdjustSplit(ImageAdjustBase):
                 newXyxy.append(box)
         result.xyxy = newXyxy
         result.image = self.image
+        result.file_path = self.file_path
         self.property: DetectionProperty
         return [result]
 
