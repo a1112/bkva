@@ -6,6 +6,7 @@ import time
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from pathlib import Path
+import atexit
 
 import cv2
 import filetype
@@ -13,6 +14,7 @@ import numpy as np
 import yaml
 from PIL import Image, UnidentifiedImageError, ImageDraw, ImageFont
 
+from BKVisionAlgorithms import CONFIG
 from BKVisionAlgorithms.base.funcs import filter_boxes
 
 
@@ -21,7 +23,7 @@ class BaseProperty(object):
     def __init__(self, yaml_path: str):
 
         def _load_yaml(yaml_url):
-            with open(yaml_url, 'r') as f:
+            with open(yaml_url, 'r', encoding=CONFIG.ENCODE) as f:
                 yaml_dict_ = yaml.load(f, Loader=yaml.FullLoader)
                 print(yaml_dict_)
                 if yaml_dict_.get('extends', None):
@@ -46,7 +48,7 @@ class BaseProperty(object):
             if isinstance(names_url, str):
                 names_url = os.path.join(self.dir_path, names_url)
                 if os.path.isfile(names_url):
-                    with open(names_url, 'r', encoding="utf-8") as f:
+                    with open(names_url, 'r', encoding=CONFIG.ENCODE) as f:
                         return _getNames_(yaml.load(f, Loader=yaml.FullLoader)['names'])
                 if os.path.isdir(names_url):
                     return _getNames_([folder.name for folder in Path(names_url).glob("*") if folder.is_dir()])
@@ -66,8 +68,8 @@ class BaseProperty(object):
         except:
             pass
         self.names = _getNames_(_names_)
-        print(self.names)
-        self.device = self.yaml_dict['device']
+        self.type = self.yaml_dict.get('type', None)
+        self.device = self.yaml_dict.get('device', 'cpu')
         self.use_cuda = not self.device == 'cpu'
 
         self.weights = self.yaml_dict['weights']
@@ -81,6 +83,10 @@ class BaseProperty(object):
         self.save = self.yaml_dict.get('save', False)
 
         self.debug = self.yaml_dict.get('debug', False)
+
+        self.loader = self.yaml_dict.get('loader', None)
+        self.adjust = self.yaml_dict.get('adjust', None)
+        self.showType = self.yaml_dict.get('show-type', 'pillow')
 
     def __repr__(self):
         return self.__str__()
@@ -135,7 +141,7 @@ class DetectionResult(BaseResult):
     def __init__(self, property_, result):
         self.drawImage = None
         self._result_ = result
-        self.showType = "pillow"
+        self.showType = property_.showType
 
         self.names = None
         self._xyxy_ = None
@@ -321,6 +327,7 @@ class BaseClassificationModel(BaseModel):
 class ImageLoaderInterface(ABC):
     def __init__(self):
         self.item_type = 'pil'
+        atexit.register(self.close)
 
     @abstractmethod
     def __iter__(self):
@@ -328,23 +335,27 @@ class ImageLoaderInterface(ABC):
 
     @abstractmethod
     def __next__(self):
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def close(self):
-        raise NotImplementedError
+        ...
 
 
 class ImageFolderLoader(ImageLoaderInterface):
-    def __init__(self, folder_path, recursion=False, remove=True):
+    def __init__(self, folder_path=None, recursion=False, remove=True, property_=None):
         super().__init__()
         self.remove = remove
         self.recursion = recursion
-        self.folder_path = folder_path
+        self.folder_path = folder_path if folder_path else property_.folder_path
         self.image_queue = queue.Queue(maxsize=100)
         self.delete_queue = queue.Queue()
         self.scanned_files = set()
         self.stop_loading = False
+
+        # if property_:
+        #     self.item_type = property_.remove
+
         self.loader_thread = threading.Thread(target=self._load_images)
         self.deleter_thread = threading.Thread(target=self._delete_files)
         self.loader_thread.start()
@@ -370,11 +381,17 @@ class ImageFolderLoader(ImageLoaderInterface):
                     image_ = Image.open(file)
                     image = image_.copy()
                     image_.close()
+
                     if image is not None:
-                        self.image_queue.put((image, file))
+                        while True:
+                            try:
+                                self.image_queue.put((image, file),timeout=1)
+                                break
+                            except queue.Full:
+                                if self.stop_loading:
+                                    return
                 except UnidentifiedImageError:
                     self.delete_queue.put(file)
-
             time.sleep(0.1)
 
     def _delete_files(self):
@@ -420,46 +437,34 @@ class ImageFolderLoader(ImageLoaderInterface):
 
     def close(self):
         self.stop_loading = True
+        print(self.image_queue.qsize())
+        print(self.delete_queue.qsize())
         self.loader_thread.join()
         self.deleter_thread.join()
 
 
 class CameraLoader(ImageLoaderInterface):
-    def __init__(self, camera_id):
+    def __next__(self):
+        pass
+
+    def close(self):
+        pass
+
+    def __iter__(self):
+        pass
+
+    def __init__(self):
         super().__init__()
-        self.camera_id = camera_id
-        self.cap = cv2.VideoCapture(camera_id)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 4096)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 3000)
-        self.cap.set(cv2.CAP_PROP_FPS, 30)
-        self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-        self.cap.set(cv2.CAP_PROP_EXPOSURE, -6)
-        self.cap.set(cv2.CAP_PROP_GAIN, 0.5)
-        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
-        self.cap.set(cv2.CAP_PROP_FOCUS, 0)
-        self.cap.set(cv2.CAP_PROP_AUTO_WB, 0)
-        self.cap.set(cv2.CAP_PROP_WB_TEMPERATURE, 4000)
-        self.cap.set(cv2.CAP_PROP_BRIGHTNESS, 0.5)
-        self.cap.set(cv2.CAP_PROP_CONTRAST, 0.5)
-        self.cap.set(cv2.CAP_PROP_SATURATION, 0.5)
-        self.cap.set(cv2.CAP_PROP_HUE, 0.5)
-        self.cap.set(cv2.CAP_PROP_GAMMA, 0.5)
-        self.cap.set(cv2.CAP_PROP_SHARPNESS, 0.5)
-        self.cap.set(cv2.CAP_PROP_BACKLIGHT, 0.5)
-        self.cap.set(cv2.CAP_PROP_ZOOM, 0.5)
-        self.cap.set(cv2.CAP_PROP_PAN, 0.5)
-        self.cap.set(cv2.CAP_PROP_TILT, 0.5)
-        self.cap.set(cv2.CAP_PROP_ROLL, 0.5)
-        self.cap.set(cv2.CAP_PROP_IRIS, 0.5)
-        self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-        self.cap.set(cv2.CAP_PROP_EXPOSURE, -6)
-        self.cap.set(cv2.CAP_PROP_GAIN, 0.5)
-        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
-        self.cap.set(cv2.CAP_PROP_FOCUS, 0)
-        self.cap.set(cv2.CAP_PROP_AUTO_WB, 0)
+        ...
 
 
-class DabaseLoader(ImageLoaderInterface):
+class DatabaseLoader(ImageLoaderInterface):
+    def __iter__(self):
+        pass
+
+    def __next__(self):
+        pass
+
     def __init__(self, database_path):
         super().__init__()
         self.database_path = database_path
@@ -591,8 +596,11 @@ class ImageDetectionAdapter(ImageAdapterFactory):
 
 class DirectorFactoryInterFace(ABC):
 
-    def __init__(self, imageLoader, model, adjust: ImageAdjustBase = ImageAdjustBase()):
-        self.imageLoader = imageLoader
+    def __init__(self, imageLoader, model, adjust: ImageAdjustBase = None):
+        if not adjust:
+            adjust = ImageAdjustBase()
+        self.property = model.property
+        self.loader = imageLoader
         self.model = model
         self.adjust = adjust
         self.adjust.setProperty(self.model.property)
@@ -616,7 +624,7 @@ class DirectorFactoryBase(DirectorFactoryInterFace):
         return self
 
     def __next__(self):
-        image = self.adjust.adjust(self.imageLoader)
+        image = self.adjust.adjust(self.loader)
         return self.adjust.adjustAfter(self.predict(image))
 
 

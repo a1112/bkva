@@ -1,8 +1,4 @@
 #--encoding:utf-8--
-#
-#
-#
-
 
 type: detection
 
@@ -24,3 +20,7 @@ nosave: false       # do not save images/videos
 batch-size: 32      # inference batch size
 
 debug: true        # debug mode
+show: true         # show results
+show-type: cv2
+loader: E:\clfData\鼎信\分割\image # image folder  input
+adjust: split # H split
