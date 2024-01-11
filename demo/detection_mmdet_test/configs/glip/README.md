@@ -6,7 +6,17 @@
 
 ## Abstract
 
-This paper presents a grounded language-image pre-training (GLIP) model for learning object-level, language-aware, and semantic-rich visual representations. GLIP unifies object detection and phrase grounding for pre-training. The unification brings two benefits: 1) it allows GLIP to learn from both detection and grounding data to improve both tasks and bootstrap a good grounding model; 2) GLIP can leverage massive image-text pairs by generating grounding boxes in a self-training fashion, making the learned representation semantic-rich. In our experiments, we pre-train GLIP on 27M grounding data, including 3M human-annotated and 24M web-crawled image-text pairs. The learned representations demonstrate strong zero-shot and few-shot transferability to various object-level recognition tasks. 1) When directly evaluated on COCO and LVIS (without seeing any images in COCO during pre-training), GLIP achieves 49.8 AP and 26.9 AP, respectively, surpassing many supervised baselines. 2) After fine-tuned on COCO, GLIP achieves 60.8 AP on val and 61.5 AP on test-dev, surpassing prior SoTA. 3) When transferred to 13 downstream object detection tasks, a 1-shot GLIP rivals with a fully-supervised Dynamic Head.
+This paper presents a grounded language-image pre-training (GLIP) model for learning object-level, language-aware, and
+semantic-rich visual representations. GLIP unifies object detection and phrase grounding for pre-training. The
+unification brings two benefits: 1) it allows GLIP to learn from both detection and grounding data to improve both tasks
+and bootstrap a good grounding model; 2) GLIP can leverage massive image-text pairs by generating grounding boxes in a
+self-training fashion, making the learned representation semantic-rich. In our experiments, we pre-train GLIP on 27M
+grounding data, including 3M human-annotated and 24M web-crawled image-text pairs. The learned representations
+demonstrate strong zero-shot and few-shot transferability to various object-level recognition tasks. 1) When directly
+evaluated on COCO and LVIS (without seeing any images in COCO during pre-training), GLIP achieves 49.8 AP and 26.9 AP,
+respectively, surpassing many supervised baselines. 2) After fine-tuned on COCO, GLIP achieves 60.8 AP on val and 61.5
+AP on test-dev, surpassing prior SoTA. 3) When transferred to 13 downstream object detection tasks, a 1-shot GLIP rivals
+with a fully-supervised Dynamic Head.
 
 <div align=center>
 <img src="https://github.com/open-mmlab/mmyolo/assets/17425982/b87228d7-f000-4a5d-b103-fe535984417a"/>
@@ -41,7 +51,10 @@ configs/glip/glip_atss_swin-t_a_fpn_dyhead_pretrain_obj365.py \
 
 ## NOTE
 
-GLIP utilizes BERT as the language model, which requires access to https://huggingface.co/. If you encounter connection errors due to network access, you can download the required files on a computer with internet access and save them locally. Finally, modify the `lang_model_name` field in the config to the local path. Please refer to the following code:
+GLIP utilizes BERT as the language model, which requires access to https://huggingface.co/. If you encounter connection
+errors due to network access, you can download the required files on a computer with internet access and save them
+locally. Finally, modify the `lang_model_name` field in the config to the local path. Please refer to the following
+code:
 
 ```python
 from transformers import BertConfig, BertModel
@@ -59,7 +72,7 @@ tokenizer.save_pretrained("your path/bert-base-uncased")
 ## Results and Models
 
 |   Model    | Zero-shot or Finetune | COCO mAP | Official COCO mAP |       Pre-Train Data       |                                 Config                                  |                                                                                                                                                                                                   Download                                                                                                                                                                                                    |
-| :--------: | :-------------------: | :------: | ----------------: | :------------------------: | :---------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:----------:|:---------------------:|:--------:|------------------:|:--------------------------:|:-----------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | GLIP-T (A) |       Zero-shot       |   43.0   |              42.9 |            O365            |       [config](glip_atss_swin-t_a_fpn_dyhead_pretrain_obj365.py)        |                                                                                                                                                         [model](https://download.openmmlab.com/mmdetection/v3.0/glip/glip_tiny_a_mmdet-b3654169.pth)                                                                                                                                                          |
 | GLIP-T (A) |       Finetune        |   53.3   |              52.9 |            O365            |   [config](glip_atss_swin-t_a_fpn_dyhead_16xb2_ms-2x_funtune_coco.py)   | [model](https://download.openmmlab.com/mmdetection/v3.0/glip/glip_atss_swin-t_a_fpn_dyhead_16xb2_ms-2x_funtune_coco/glip_atss_swin-t_a_fpn_dyhead_16xb2_ms-2x_funtune_coco_20230914_180419-e6addd96.pth)\| [log](https://download.openmmlab.com/mmdetection/v3.0/glip/glip_atss_swin-t_a_fpn_dyhead_16xb2_ms-2x_funtune_coco/glip_atss_swin-t_a_fpn_dyhead_16xb2_ms-2x_funtune_coco_20230914_180419.log.json) |
 | GLIP-T (B) |       Zero-shot       |   44.9   |              44.9 |            O365            |       [config](glip_atss_swin-t_b_fpn_dyhead_pretrain_obj365.py)        |                                                                                                                                                         [model](https://download.openmmlab.com/mmdetection/v3.0/glip/glip_tiny_b_mmdet-6dfbd102.pth)                                                                                                                                                          |
@@ -73,8 +86,17 @@ tokenizer.save_pretrained("your path/bert-base-uncased")
 
 Note:
 
-1. The weights corresponding to the zero-shot model are adopted from the official weights and converted using the [script](../../tools/model_converters/glip_to_mmdet.py). We have not retrained the model for the time being.
-2. Finetune refers to fine-tuning on the COCO 2017 dataset. The L model is trained using 16 A100 GPUs, while the remaining models are trained using 16 NVIDIA GeForce 3090 GPUs.
-3. Taking the GLIP-T(A) model as an example, I trained it twice using the official code, and the fine-tuning mAP were 52.5 and 52.6. Therefore, the mAP we achieved in our reproduction is higher than the official results. The main reason is that we modified the `weight_decay` parameter.
-4. Our experiments revealed that training for 24 epochs leads to overfitting. Therefore, we chose the best-performing model. If users want to train on a custom dataset, it is advisable to shorten the number of epochs and save the best-performing model.
-5. Due to the official absence of fine-tuning hyperparameters for the GLIP-L model, we have not yet reproduced the official accuracy. I have found that overfitting can also occur, so it may be necessary to consider custom modifications to data augmentation and model enhancement. Given the high cost of training, we have not conducted any research on this matter at the moment.
+1. The weights corresponding to the zero-shot model are adopted from the official weights and converted using
+   the [script](../../tools/model_converters/glip_to_mmdet.py). We have not retrained the model for the time being.
+2. Finetune refers to fine-tuning on the COCO 2017 dataset. The L model is trained using 16 A100 GPUs, while the
+   remaining models are trained using 16 NVIDIA GeForce 3090 GPUs.
+3. Taking the GLIP-T(A) model as an example, I trained it twice using the official code, and the fine-tuning mAP were
+   52.5 and 52.6. Therefore, the mAP we achieved in our reproduction is higher than the official results. The main
+   reason is that we modified the `weight_decay` parameter.
+4. Our experiments revealed that training for 24 epochs leads to overfitting. Therefore, we chose the best-performing
+   model. If users want to train on a custom dataset, it is advisable to shorten the number of epochs and save the
+   best-performing model.
+5. Due to the official absence of fine-tuning hyperparameters for the GLIP-L model, we have not yet reproduced the
+   official accuracy. I have found that overfitting can also occur, so it may be necessary to consider custom
+   modifications to data augmentation and model enhancement. Given the high cost of training, we have not conducted any
+   research on this matter at the moment.

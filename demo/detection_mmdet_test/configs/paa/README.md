@@ -6,7 +6,19 @@
 
 ## Abstract
 
-In object detection, determining which anchors to assign as positive or negative samples, known as anchor assignment, has been revealed as a core procedure that can significantly affect a model's performance. In this paper we propose a novel anchor assignment strategy that adaptively separates anchors into positive and negative samples for a ground truth bounding box according to the model's learning status such that it is able to reason about the separation in a probabilistic manner. To do so we first calculate the scores of anchors conditioned on the model and fit a probability distribution to these scores. The model is then trained with anchors separated into positive and negative samples according to their probabilities. Moreover, we investigate the gap between the training and testing objectives and propose to predict the Intersection-over-Unions of detected boxes as a measure of localization quality to reduce the discrepancy. The combined score of classification and localization qualities serving as a box selection metric in non-maximum suppression well aligns with the proposed anchor assignment strategy and leads significant performance improvements. The proposed methods only add a single convolutional layer to RetinaNet baseline and does not require multiple anchors per location, so are efficient. Experimental results verify the effectiveness of the proposed methods. Especially, our models set new records for single-stage detectors on MS COCO test-dev dataset with various backbones.
+In object detection, determining which anchors to assign as positive or negative samples, known as anchor assignment,
+has been revealed as a core procedure that can significantly affect a model's performance. In this paper we propose a
+novel anchor assignment strategy that adaptively separates anchors into positive and negative samples for a ground truth
+bounding box according to the model's learning status such that it is able to reason about the separation in a
+probabilistic manner. To do so we first calculate the scores of anchors conditioned on the model and fit a probability
+distribution to these scores. The model is then trained with anchors separated into positive and negative samples
+according to their probabilities. Moreover, we investigate the gap between the training and testing objectives and
+propose to predict the Intersection-over-Unions of detected boxes as a measure of localization quality to reduce the
+discrepancy. The combined score of classification and localization qualities serving as a box selection metric in
+non-maximum suppression well aligns with the proposed anchor assignment strategy and leads significant performance
+improvements. The proposed methods only add a single convolutional layer to RetinaNet baseline and does not require
+multiple anchors per location, so are efficient. Experimental results verify the effectiveness of the proposed methods.
+Especially, our models set new records for single-stage detectors on MS COCO test-dev dataset with various backbones.
 
 <div align=center>
 <img src="https://user-images.githubusercontent.com/40661020/143968195-519a116a-de29-437e-b4c8-30aef43dcb15.png"/>
@@ -19,7 +31,7 @@ ECCV 2020 paper for Probabilistic Anchor Assignment with IoU
 Prediction for Object Detection.
 
 | Backbone  | Lr schd | Mem (GB) | Score voting | box AP |                 Config                 |                                                                                                                                               Download                                                                                                                                               |
-| :-------: | :-----: | :------: | :----------: | :----: | :------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:---------:|:-------:|:--------:|:------------:|:------:|:--------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | R-50-FPN  |   12e   |   3.7    |     True     |  40.4  |   [config](./paa_r50_fpn_1x_coco.py)   |                     [model](https://download.openmmlab.com/mmdetection/v2.0/paa/paa_r50_fpn_1x_coco/paa_r50_fpn_1x_coco_20200821-936edec3.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/paa/paa_r50_fpn_1x_coco/paa_r50_fpn_1x_coco_20200821-936edec3.log.json)                      |
 | R-50-FPN  |   12e   |   3.7    |    False     |  40.2  |                   -                    |                                                                                                                                                                                                                                                                                                      |
 | R-50-FPN  |   18e   |   3.7    |     True     |  41.4  |  [config](./paa_r50_fpn_1.5x_coco.py)  |                 [model](https://download.openmmlab.com/mmdetection/v2.0/paa/paa_r50_fpn_1.5x_coco/paa_r50_fpn_1.5x_coco_20200823-805d6078.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/paa/paa_r50_fpn_1.5x_coco/paa_r50_fpn_1.5x_coco_20200823-805d6078.log.json)                  |
@@ -33,7 +45,8 @@ Prediction for Object Detection.
 
 **Note**:
 
-1. We find that the performance is unstable with 1x setting and may fluctuate by about 0.2 mAP. We report the best results.
+1. We find that the performance is unstable with 1x setting and may fluctuate by about 0.2 mAP. We report the best
+   results.
 
 ## Citation
 

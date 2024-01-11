@@ -82,14 +82,14 @@ test_dataloader = dict(
 val_evaluator = dict(
     type='CocoMetric',
     ann_file=data_root +
-    'Anno/segmentation/DeepFashion_segmentation_query.json',
+             'Anno/segmentation/DeepFashion_segmentation_query.json',
     metric=['bbox', 'segm'],
     format_only=False,
     backend_args=backend_args)
 test_evaluator = dict(
     type='CocoMetric',
     ann_file=data_root +
-    'Anno/segmentation/DeepFashion_segmentation_gallery.json',
+             'Anno/segmentation/DeepFashion_segmentation_gallery.json',
     metric=['bbox', 'segm'],
     format_only=False,
     backend_args=backend_args)

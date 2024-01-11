@@ -1,29 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import os
-import os.path as osp
 import math
+import os.path as osp
 import time
 
-import numpy
-from tqdm import tqdm
-
-import numpy as np
 import cv2
+import numpy
+import numpy as np
 import torch
 from PIL import ImageFont
-from alg import yolov6
-
-from yolov6.utils.events import LOGGER, load_yaml
-
-from yolov6.layers.common import DetectBackend
+from tqdm import tqdm
 from yolov6.data.data_augment import letterbox
+from yolov6.layers.common import DetectBackend
+from yolov6.utils.events import LOGGER, load_yaml
 from yolov6.utils.nms import non_max_suppression
+
 
 class yoloV6:
     def __init__(self, weights, device, yaml, img_size, half):
-        import glob
-        from yolov6.data.datasets import IMG_FORMATS
         self.__dict__.update(locals())
         # Init model
         self.device = device
@@ -82,7 +76,8 @@ class yoloV6:
                             # xywh = (self.box_convert(torch.tensor(xyxy).view(1, 4)) / gn).view(
                             #     -1).tolist()  # normalized xywh
                             line = (
-                            int(cls.cpu().numpy()), *[int(i.cpu().numpy()) for i in xyxy], float(conf.cpu().numpy()))
+                                int(cls.cpu().numpy()), *[int(i.cpu().numpy()) for i in xyxy],
+                                float(conf.cpu().numpy()))
                             detlist.append(line)
                     re.append(detlist)
                 imageCache = torch.Tensor().to(self.device)

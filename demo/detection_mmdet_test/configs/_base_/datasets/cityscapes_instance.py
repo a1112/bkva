@@ -79,7 +79,7 @@ val_evaluator = [
     dict(
         type='CocoMetric',
         ann_file=data_root +
-        'annotations/instancesonly_filtered_gtFine_val.json',
+                 'annotations/instancesonly_filtered_gtFine_val.json',
         metric=['bbox', 'segm'],
         backend_args=backend_args),
     dict(

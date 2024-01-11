@@ -45,4 +45,4 @@ model = dict(
             order=('act', 'conv', 'norm'),
             inplace=False),
         norm_cfg=norm_cfg,
-        skip_inds=[(0, 1, 2, 3), (0, 1, 2), (0, 1), (0, ), ()]))
+        skip_inds=[(0, 1, 2, 3), (0, 1, 2), (0, 1), (0,), ()]))

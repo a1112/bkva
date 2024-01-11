@@ -4,7 +4,14 @@
 
 <!-- [ABSTRACT] -->
 
-Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple object tracking with a focus on simple, effective algorithms. In this paper, we integrate appearance information to improve the performance of SORT. Due to this extension we are able to track objects through longer periods of occlusions, effectively reducing the number of identity switches. In spirit of the original framework we place much of the computational complexity into an offline pre-training stage where we learn a deep association metric on a largescale person re-identification dataset. During online application, we establish measurement-to-track associations using nearest neighbor queries in visual appearance space. Experimental evaluation shows that our extensions reduce the number of identity switches by 45%, achieving overall competitive performance at high frame rates.
+Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple object tracking with a focus on simple,
+effective algorithms. In this paper, we integrate appearance information to improve the performance of SORT. Due to this
+extension we are able to track objects through longer periods of occlusions, effectively reducing the number of identity
+switches. In spirit of the original framework we place much of the computational complexity into an offline pre-training
+stage where we learn a deep association metric on a largescale person re-identification dataset. During online
+application, we establish measurement-to-track associations using nearest neighbor queries in visual appearance space.
+Experimental evaluation shows that our extensions reduce the number of identity switches by 45%, achieving overall
+competitive performance at high frame rates.
 
 <!-- [IMAGE] -->
 
@@ -15,10 +22,11 @@ Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple o
 ## Results and models on MOT17
 
 Currently we do not support training ReID models for DeepSORT.
-We directly use the ReID model from [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw). These missed features will be supported in the future.
+We directly use the ReID model from [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw). These missed features
+will be supported in the future.
 
 |  Method  |      Detector      | ReID | Train Set  | Test Set | Public | Inf time (fps) | HOTA | MOTA | IDF1 |  FP   |  FN   | IDSw. |                                       Config                                       |                                                                                                         Download                                                                                                         |
-| :------: | :----------------: | :--: | :--------: | :------: | :----: | :------------: | :--: | :--: | :--: | :---: | :---: | :---: | :--------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:--------:|:------------------:|:----:|:----------:|:--------:|:------:|:--------------:|:----:|:----:|:----:|:-----:|:-----:|:-----:|:----------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | DeepSORT | R50-FasterRCNN-FPN | R50  | half-train | half-val |   N    |      13.8      | 57.0 | 63.7 | 69.5 | 15063 | 40323 | 3276  | [config](deepsort_faster-rcnn_r50_fpn_8xb2-4e_mot17halftrain_test-mot17halfval.py) | [detector](https://download.openmmlab.com/mmtracking/mot/faster_rcnn/faster-rcnn_r50_fpn_4e_mot17-half-64ee2ed4.pth) [reid](https://download.openmmlab.com/mmtracking/mot/reid/tracktor_reid_r50_iter25245-a452f51f.pth) |
 
 ## Get started

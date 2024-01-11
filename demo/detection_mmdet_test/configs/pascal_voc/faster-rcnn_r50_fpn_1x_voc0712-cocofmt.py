@@ -6,9 +6,9 @@ model = dict(roi_head=dict(bbox_head=dict(num_classes=20)))
 
 METAINFO = {
     'classes':
-    ('aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat',
-     'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person',
-     'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor'),
+        ('aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat',
+         'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person',
+         'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor'),
     # palette is a list of color tuples, which is used for visualization.
     'palette': [(106, 0, 228), (119, 11, 32), (165, 42, 42), (0, 0, 192),
                 (197, 226, 255), (0, 60, 100), (0, 0, 142), (255, 77, 255),

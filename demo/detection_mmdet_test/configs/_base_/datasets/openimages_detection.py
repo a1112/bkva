@@ -67,7 +67,7 @@ val_dataloader = dict(
         hierarchy_file='annotations/bbox_labels_600_hierarchy.json',
         meta_file='annotations/validation-image-metas.pkl',
         image_level_ann_file='annotations/validation-'
-        'annotations-human-imagelabels-boxable.csv',
+                             'annotations-human-imagelabels-boxable.csv',
         pipeline=test_pipeline,
         backend_args=backend_args))
 test_dataloader = val_dataloader

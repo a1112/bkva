@@ -10,7 +10,8 @@
 
 #### Open Images v6
 
-[Open Images](https://storage.googleapis.com/openimages/web/index.html) is a dataset of ~9M images annotated with image-level labels,
+[Open Images](https://storage.googleapis.com/openimages/web/index.html) is a dataset of ~9M images annotated with
+image-level labels,
 object bounding boxes, object segmentation masks, visual relationships,
 and localized narratives:
 
@@ -52,7 +53,8 @@ tasks jointly and stimulate progress towards genuine scene understanding.
 
 #### Open Images Challenge 2019
 
-[Open Images Challenges 2019](https://storage.googleapis.com/openimages/web/challenge2019.html) is based on the V5 release of the Open
+[Open Images Challenges 2019](https://storage.googleapis.com/openimages/web/challenge2019.html) is based on the V5
+release of the Open
 Images dataset. The images of the dataset are very varied and
 often contain complex scenes with several objects (explore the dataset).
 
@@ -117,17 +119,21 @@ often contain complex scenes with several objects (explore the dataset).
 1. The training and validation images of Open Images Challenge dataset are based on
    Open Images v6, but the test images are different.
 2. The Open Images Challenges annotations are obtained from [TSD](https://github.com/Sense-X/TSD).
-   You can also download the annotations from [official website](https://storage.googleapis.com/openimages/web/challenge2019_downloads.html),
-   and set data.train.type=OpenImagesDataset, data.val.type=OpenImagesDataset, and data.test.type=OpenImagesDataset in the config
-3. If users do not want to use `validation-annotations-human-imagelabels-boxable.csv` and `challenge-2019-validation-detection-human-imagelabels.csv`
-   users can set `test_dataloader.dataset.image_level_ann_file=None` and `test_dataloader.dataset.image_level_ann_file=None` in the config.
+   You can also download the annotations
+   from [official website](https://storage.googleapis.com/openimages/web/challenge2019_downloads.html),
+   and set data.train.type=OpenImagesDataset, data.val.type=OpenImagesDataset, and data.test.type=OpenImagesDataset in
+   the config
+3. If users do not want to use `validation-annotations-human-imagelabels-boxable.csv`
+   and `challenge-2019-validation-detection-human-imagelabels.csv`
+   users can set `test_dataloader.dataset.image_level_ann_file=None`
+   and `test_dataloader.dataset.image_level_ann_file=None` in the config.
    Please note that loading image-levels label is the default of Open Images evaluation metric.
    More details please refer to the [official website](https://storage.googleapis.com/openimages/web/evaluation.html)
 
 ## Results and Models
 
 |         Architecture          | Backbone |  Style  | Lr schd |       Sampler       | Mem (GB) | Inf time (fps) | box AP |                                Config                                |                                                                                                                                                                                                      Download                                                                                                                                                                                                      |
-| :---------------------------: | :------: | :-----: | :-----: | :-----------------: | :------: | :------------: | :----: | :------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:-----------------------------:|:--------:|:-------:|:-------:|:-------------------:|:--------:|:--------------:|:------:|:--------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |         Faster R-CNN          |   R-50   | pytorch |   1x    |    Group Sampler    |   7.7    |       -        |  51.6  |        [config](./faster-rcnn_r50_fpn_32xb2-1x_openimages.py)        |                             [model](https://download.openmmlab.com/mmdetection/v2.0/openimages/faster_rcnn_r50_fpn_32x2_1x_openimages/faster_rcnn_r50_fpn_32x2_1x_openimages_20211130_231159-e87ab7ce.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/openimages/faster_rcnn_r50_fpn_32x2_1x_openimages/faster_rcnn_r50_fpn_32x2_1x_openimages_20211130_231159.log.json)                             |
 |         Faster R-CNN          |   R-50   | pytorch |   1x    | Class Aware Sampler |   7.7    |       -        |  60.0  |      [config](./faster-rcnn_r50_fpn_32xb2-cas-1x_openimages.py)      |                     [model](https://download.openmmlab.com/mmdetection/v2.0/openimages/faster_rcnn_r50_fpn_32x2_cas_1x_openimages/faster_rcnn_r50_fpn_32x2_cas_1x_openimages_20220306_202424-98c630e5.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/openimages/faster_rcnn_r50_fpn_32x2_cas_1x_openimages/faster_rcnn_r50_fpn_32x2_cas_1x_openimages_20220306_202424.log.json)                     |
 | Faster R-CNN (Challenge 2019) |   R-50   | pytorch |   1x    |    Group Sampler    |   7.7    |       -        |  54.9  |   [config](./faster-rcnn_r50_fpn_32xb2-1x_openimages-challenge.py)   |         [model](https://download.openmmlab.com/mmdetection/v2.0/openimages/faster_rcnn_r50_fpn_32x2_1x_openimages_challenge/faster_rcnn_r50_fpn_32x2_1x_openimages_challenge_20220114_045100-0e79e5df.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/openimages/faster_rcnn_r50_fpn_32x2_1x_openimages_challenge/faster_rcnn_r50_fpn_32x2_1x_openimages_challenge_20220114_045100.log.json)         |
@@ -142,7 +148,7 @@ often contain complex scenes with several objects (explore the dataset).
 ### Results of consider image level labels
 
 |           Architecture            |       Sampler       | Consider Image Level Labels | box AP |
-| :-------------------------------: | :-----------------: | :-------------------------: | :----: |
+|:---------------------------------:|:-------------------:|:---------------------------:|:------:|
 | Faster R-CNN r50 (Challenge 2019) |    Group Sampler    |             w/o             | 62.19  |
 | Faster R-CNN r50 (Challenge 2019) |    Group Sampler    |             w/              | 54.87  |
 | Faster R-CNN r50 (Challenge 2019) | Class Aware Sampler |             w/o             | 71.77  |

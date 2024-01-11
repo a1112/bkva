@@ -1,6 +1,7 @@
 # Training a ReID Model
 
-You may want to train a ReID model for multiple object tracking or other applications. We support ReID model training in MMDetection, which is built upon [MMPretrain](https://github.com/open-mmlab/mmpretrain).
+You may want to train a ReID model for multiple object tracking or other applications. We support ReID model training in
+MMDetection, which is built upon [MMPretrain](https://github.com/open-mmlab/mmpretrain).
 
 ### 1. Development Environment Setup
 
@@ -10,7 +11,9 @@ Tracking Development Environment Setup can refer to this [document](../../docs/e
 
 This section will show how to train a ReID model on standard datasets i.e. MOT17.
 
-We need to download datasets following docs. We use [ReIDDataset](mmdet/datasets/reid_dataset.py) to maintain standard datasets. In this case, you need to convert the official dataset to this style. We provide scripts and the usages as follow:
+We need to download datasets following docs. We use [ReIDDataset](mmdet/datasets/reid_dataset.py) to maintain standard
+datasets. In this case, you need to convert the official dataset to this style. We provide scripts and the usages as
+follow:
 
 ```python
 python tools/dataset_converters/mot2reid.py -i ./data/MOT17/ -o ./data/MOT17/reid --val-split 0.2 --vis-threshold 0.3
@@ -42,9 +45,11 @@ MOT17
 │   │   ├── val_20.txt
 ```
 
-Note: `80` in `train_80.txt` means the proportion of the training dataset to the whole ReID dataset is eighty percent. While the proportion of the validation dataset is twenty percent.
+Note: `80` in `train_80.txt` means the proportion of the training dataset to the whole ReID dataset is eighty percent.
+While the proportion of the validation dataset is twenty percent.
 
-For training, we provide a annotation list `train_80.txt`. Each line of the list constraints a filename and its corresponding ground-truth labels. The format is as follows:
+For training, we provide a annotation list `train_80.txt`. Each line of the list constraints a filename and its
+corresponding ground-truth labels. The format is as follows:
 
 ```
 MOT17-05-FRCNN_000110/000018.jpg 0
@@ -55,7 +60,8 @@ MOT17-02-FRCNN_000009/000081.jpg 3
 
 For validation, The annotation list `val_20.txt` remains the same as format above.
 
-Note: Images in `MOT17/reid/imgs` are cropped from raw images in `MOT17/train` by the corresponding `gt.txt`. The value of ground-truth labels should fall in range `[0, num_classes - 1]`.
+Note: Images in `MOT17/reid/imgs` are cropped from raw images in `MOT17/train` by the corresponding `gt.txt`. The value
+of ground-truth labels should fall in range `[0, num_classes - 1]`.
 
 ### 3. Training
 
@@ -84,7 +90,8 @@ You need to convert your customize datasets to existing dataset format.
 
 #### An example of customized dataset
 
-Assume we are going to implement a `Filelist` dataset, which takes filelists for both training and testing. The directory of the dataset is as follows:
+Assume we are going to implement a `Filelist` dataset, which takes filelists for both training and testing. The
+directory of the dataset is as follows:
 
 ```
 Filelist
@@ -111,7 +118,8 @@ person2/000000.jpg 1
 person2/000001.jpg 1
 ```
 
-You can directly use [ReIDDataset](mmdet/datasets/reid_dataset.py). In this case, you only need to modify the config as follows:
+You can directly use [ReIDDataset](mmdet/datasets/reid_dataset.py). In this case, you only need to modify the config as
+follows:
 
 ```python
 # modify the path of annotation files and the image path prefix

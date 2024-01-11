@@ -1,9 +1,11 @@
 # BKVisionAlgorithms 使用文档
 
 ## 简介
+
 BKVisionAlgorithms 是一个为整合各种计算机视觉算法而设计的Python框架。提供统一接口实现 cv 任务
 
 ## 算法支持：
+
     图像分类：timm(timm 本身就是分类器整合框架,timm支持 1000+ 分类器模型结构)
     对象检测：
         - yolo: yolov5, yolovX,yolov6,yolov8
@@ -14,17 +16,22 @@ BKVisionAlgorithms 是一个为整合各种计算机视觉算法而设计的Pyth
     图像分割：
         - Mask R-CNN.FCN,PID,U-Net,DeepLab系列 
 
-
 ## 安装
+
 ```bash
 pip install bkvisionalgorithms
 ```
+
 ## 快速开始
-### 导入框架 
+
+### 导入框架
+
 ```python
 import bkvisionalgorithms as bkva
 ```
+
 ### 使用示例1 图像分类
+
 ```python
 from tqdm import tqdm
 
@@ -88,16 +95,18 @@ if __name__ == "__main__":
 ```
 
 ## 核心模块
+
 ```python
     algorithms.base.property
 ```
 
 包含基础属性类（BaseProperty），及专用属性类（DetectionProperty 和 ClassificationProperty）
 
-
 ## 配置文件
+
 使用 Property 实例化 yaml 以创造cv模型
 例： config.yaml
+
 ```yaml
 #--encoding:utf-8--
 
@@ -124,6 +133,7 @@ debug: true        # debug mode
 ```
 
 # 依赖
+
 ```
 pypattyrn
 onnxruntime
@@ -135,8 +145,8 @@ tqdm
 
 # 拓展
 
-
 # 其他支持
+
     除了 BKVisionAlgorithms ， 下列框架受支持
         - BKVisionTrain 训练
         - BKVisionCamera 统一的相机接口，对 面阵，线阵，甚至3D相机 的 适配器框架
@@ -146,4 +156,5 @@ tqdm
         - BKVisionBusiness 根据现场的业务逻辑管理
 
 # 许可证
+
 由北京科技大学设计研究院所有。

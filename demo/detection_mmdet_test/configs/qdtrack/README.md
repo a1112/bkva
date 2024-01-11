@@ -4,7 +4,16 @@
 
 <!-- [ABSTRACT] -->
 
-Similarity learning has been recognized as a crucial step for object tracking. However, existing multiple object tracking methods only use sparse ground truth matching as the training objective, while ignoring the majority of the informative regions on the images. In this paper, we present Quasi-Dense Similarity Learning, which densely samples hundreds of region proposals on a pair of images for contrastive learning. We can directly combine this similarity learning with existing detection methods to build Quasi-Dense Tracking (QDTrack) without turning to displacementregression or motion priors. We also find that the resulting distinctive feature space admits a simple nearest neighbor search at the inference time. Despite its simplicity, QD-Track outperforms all existing methods on MOT, BDD100K, Waymo, and TAO tracking benchmarks. It achieves 68.7 MOTA at 20.3 FPS on MOT17 without using external training data. Compared to methods with similar detectors, it boosts almost 10 points of MOTA and significantly decreases the number of ID switches on BDD100K and Waymo datasets.
+Similarity learning has been recognized as a crucial step for object tracking. However, existing multiple object
+tracking methods only use sparse ground truth matching as the training objective, while ignoring the majority of the
+informative regions on the images. In this paper, we present Quasi-Dense Similarity Learning, which densely samples
+hundreds of region proposals on a pair of images for contrastive learning. We can directly combine this similarity
+learning with existing detection methods to build Quasi-Dense Tracking (QDTrack) without turning to
+displacementregression or motion priors. We also find that the resulting distinctive feature space admits a simple
+nearest neighbor search at the inference time. Despite its simplicity, QD-Track outperforms all existing methods on MOT,
+BDD100K, Waymo, and TAO tracking benchmarks. It achieves 68.7 MOTA at 20.3 FPS on MOT17 without using external training
+data. Compared to methods with similar detectors, it boosts almost 10 points of MOTA and significantly decreases the
+number of ID switches on BDD100K and Waymo datasets.
 
 <!-- [IMAGE] -->
 
@@ -16,7 +25,7 @@ Similarity learning has been recognized as a crucial step for object tracking. H
 ## Results and models on MOT17
 
 | Method  |   Detector   | Train Set  | Test Set | Public | Inf time (fps) | HOTA | MOTA | IDF1 |  FP  |  FN   | IDSw. |                                      Config                                       |                                                                                                                                        Download                                                                                                                                        |
-| :-----: | :----------: | :--------: | :------: | :----: | :------------: | :--: | :--: | :--: | :--: | :---: | :---: | :-------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:-------:|:------------:|:----------:|:--------:|:------:|:--------------:|:----:|:----:|:----:|:----:|:-----:|:-----:|:---------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | QDTrack | Faster R-CNN | half-train | half-val |   N    |       -        | 57.1 | 68.1 | 68.6 | 7707 | 42732 | 1083  | [config](qdtrack_faster-rcnn_r50_fpn_8xb2-4e_mot17halftrain_test-mot17halfval.py) | [model](https://download.openmmlab.com/mmtracking/mot/qdtrack/mot_dataset/qdtrack_faster-rcnn_r50_fpn_4e_mot17_20220315_145635-76f295ef.pth) \| [log](https://download.openmmlab.com/mmtracking/mot/qdtrack/mot_dataset/qdtrack_faster-rcnn_r50_fpn_4e_mot17_20220315_145635.log.json) |
 
 ## Get started
@@ -31,7 +40,8 @@ Tracking Dataset Prepare can refer to this [document](../../docs/en/user_guides/
 
 ### 3. Training
 
-Due to the influence of parameters such as learning rate in default configuration file, we recommend using 8 GPUs for training in order to reproduce accuracy. You can use the following command to start the training.
+Due to the influence of parameters such as learning rate in default configuration file, we recommend using 8 GPUs for
+training in order to reproduce accuracy. You can use the following command to start the training.
 
 ```shell
 # Training QDTrack on mot17-half-train dataset with following command.
@@ -72,7 +82,8 @@ Use a single GPU to predict a video and save it as a video.
 python demo/mot_demo.py demo/demo_mot.mp4 configs/qdtrack/qdtrack_faster-rcnn_r50_fpn_8xb2-4e_mot17halftrain_test-mot17halfval.py --checkpoint ${CHECKPOINT_PATH} --out mot.mp4
 ```
 
-If you want to know about more detailed usage of `mot_demo.py`, please refer to this [document](../../docs/en/user_guides/tracking_inference.md).
+If you want to know about more detailed usage of `mot_demo.py`, please refer to
+this [document](../../docs/en/user_guides/tracking_inference.md).
 
 ## Citation
 

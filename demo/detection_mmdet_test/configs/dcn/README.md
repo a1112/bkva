@@ -6,7 +6,14 @@
 
 ## Abstract
 
-Convolutional neural networks (CNNs) are inherently limited to model geometric transformations due to the fixed geometric structures in its building modules. In this work, we introduce two new modules to enhance the transformation modeling capacity of CNNs, namely, deformable convolution and deformable RoI pooling. Both are based on the idea of augmenting the spatial sampling locations in the modules with additional offsets and learning the offsets from target tasks, without additional supervision. The new modules can readily replace their plain counterparts in existing CNNs and can be easily trained end-to-end by standard back-propagation, giving rise to deformable convolutional networks. Extensive experiments validate the effectiveness of our approach on sophisticated vision tasks of object detection and semantic segmentation.
+Convolutional neural networks (CNNs) are inherently limited to model geometric transformations due to the fixed
+geometric structures in its building modules. In this work, we introduce two new modules to enhance the transformation
+modeling capacity of CNNs, namely, deformable convolution and deformable RoI pooling. Both are based on the idea of
+augmenting the spatial sampling locations in the modules with additional offsets and learning the offsets from target
+tasks, without additional supervision. The new modules can readily replace their plain counterparts in existing CNNs and
+can be easily trained end-to-end by standard back-propagation, giving rise to deformable convolutional networks.
+Extensive experiments validate the effectiveness of our approach on sophisticated vision tasks of object detection and
+semantic segmentation.
 
 <div align=center>
 <img src="https://user-images.githubusercontent.com/40661020/143876246-c4985e25-e286-4511-9b7c-97af2857461e.png"/>
@@ -15,7 +22,7 @@ Convolutional neural networks (CNNs) are inherently limited to model geometric t
 ## Results and Models
 
 |    Backbone     |    Model     |  Style  |     Conv     | Pool  | Lr schd | Mem (GB) | Inf time (fps) | box AP | mask AP |                               Config                                |                                                                                                                                                                                       Download                                                                                                                                                                                       |
-| :-------------: | :----------: | :-----: | :----------: | :---: | :-----: | :------: | :------------: | :----: | :-----: | :-----------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:---------------:|:------------:|:-------:|:------------:|:-----:|:-------:|:--------:|:--------------:|:------:|:-------:|:-------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |    R-50-FPN     |    Faster    | pytorch | dconv(c3-c5) |   -   |   1x    |   4.0    |      17.8      |  41.3  |         |       [config](./faster-rcnn_r50-dconv-c3-c5_fpn_1x_coco.py)        |                      [model](https://download.openmmlab.com/mmdetection/v2.0/dcn/faster_rcnn_r50_fpn_dconv_c3-c5_1x_coco/faster_rcnn_r50_fpn_dconv_c3-c5_1x_coco_20200130-d68aed1e.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/dcn/faster_rcnn_r50_fpn_dconv_c3-c5_1x_coco/faster_rcnn_r50_fpn_dconv_c3-c5_1x_coco_20200130_212941.log.json)                       |
 |    R-50-FPN     |    Faster    | pytorch |      -       | dpool |   1x    |   5.0    |      17.2      |  38.9  |         |          [config](./faster-rcnn_r50_fpn_dpool_1x_coco.py)           |                                  [model](https://download.openmmlab.com/mmdetection/v2.0/dcn/faster_rcnn_r50_fpn_dpool_1x_coco/faster_rcnn_r50_fpn_dpool_1x_coco_20200307-90d3c01d.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/dcn/faster_rcnn_r50_fpn_dpool_1x_coco/faster_rcnn_r50_fpn_dpool_1x_coco_20200307_203250.log.json)                                   |
 |    R-101-FPN    |    Faster    | pytorch | dconv(c3-c5) |   -   |   1x    |   6.0    |      12.5      |  42.7  |         |       [config](./faster-rcnn_r101-dconv-c3-c5_fpn_1x_coco.py)       |                    [model](https://download.openmmlab.com/mmdetection/v2.0/dcn/faster_rcnn_r101_fpn_dconv_c3-c5_1x_coco/faster_rcnn_r101_fpn_dconv_c3-c5_1x_coco_20200203-1377f13d.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/dcn/faster_rcnn_r101_fpn_dconv_c3-c5_1x_coco/faster_rcnn_r101_fpn_dconv_c3-c5_1x_coco_20200203_230019.log.json)                     |
@@ -31,9 +38,12 @@ Convolutional neural networks (CNNs) are inherently limited to model geometric t
 
 **Notes:**
 
-- `dconv` denotes deformable convolution, `c3-c5` means adding dconv in resnet stage 3 to 5. `dpool` denotes deformable roi pooling.
-- The dcn ops are modified from https://github.com/chengdazhi/Deformable-Convolution-V2-PyTorch, which should be more memory efficient and slightly faster.
-- (\*) For R-50-FPN (dg=4), dg is short for deformable_group. This model is trained and tested on Amazon EC2 p3dn.24xlarge instance.
+- `dconv` denotes deformable convolution, `c3-c5` means adding dconv in resnet stage 3 to 5. `dpool` denotes deformable
+  roi pooling.
+- The dcn ops are modified from https://github.com/chengdazhi/Deformable-Convolution-V2-PyTorch, which should be more
+  memory efficient and slightly faster.
+- (\*) For R-50-FPN (dg=4), dg is short for deformable_group. This model is trained and tested on Amazon EC2
+  p3dn.24xlarge instance.
 - **Memory, Train/Inf time is outdated.**
 
 ## Citation

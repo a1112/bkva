@@ -27,7 +27,7 @@ model = dict(
             type='mmpretrain.ResNet',
             depth=50,
             num_stages=4,
-            out_indices=(3, ),
+            out_indices=(3,),
             style='pytorch'),
         neck=dict(type='GlobalAveragePooling', kernel_size=(8, 4), stride=1),
         head=dict(
@@ -67,7 +67,8 @@ model = dict(
     postprocess_model=dict(
         type='AppearanceFreeLink',
         checkpoint=  # noqa: E251
-        'https://download.openmmlab.com/mmtracking/mot/strongsort/mot_dataset/aflink_motchallenge_20220812_190310-a7578ad3.pth',  # noqa: E501
+        'https://download.openmmlab.com/mmtracking/mot/strongsort/mot_dataset/aflink_motchallenge_20220812_190310-a7578ad3.pth',
+        # noqa: E501
         temporal_threshold=(0, 30),
         spatial_threshold=50,
         confidence_threshold=0.95,

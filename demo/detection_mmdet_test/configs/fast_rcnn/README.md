@@ -6,7 +6,12 @@
 
 ## Abstract
 
-This paper proposes a Fast Region-based Convolutional Network method (Fast R-CNN) for object detection. Fast R-CNN builds on previous work to efficiently classify object proposals using deep convolutional networks. Compared to previous work, Fast R-CNN employs several innovations to improve training and testing speed while also increasing detection accuracy. Fast R-CNN trains the very deep VGG16 network 9x faster than R-CNN, is 213x faster at test-time, and achieves a higher mAP on PASCAL VOC 2012. Compared to SPPnet, Fast R-CNN trains VGG16 3x faster, tests 10x faster, and is more accurate.
+This paper proposes a Fast Region-based Convolutional Network method (Fast R-CNN) for object detection. Fast R-CNN
+builds on previous work to efficiently classify object proposals using deep convolutional networks. Compared to previous
+work, Fast R-CNN employs several innovations to improve training and testing speed while also increasing detection
+accuracy. Fast R-CNN trains the very deep VGG16 network 9x faster than R-CNN, is 213x faster at test-time, and achieves
+a higher mAP on PASCAL VOC 2012. Compared to SPPnet, Fast R-CNN trains VGG16 3x faster, tests 10x faster, and is more
+accurate.
 
 <div align=center>
 <img src="https://user-images.githubusercontent.com/40661020/143882189-6258c05c-f2a1-4320-9282-7e2f2d502eb2.png"/>
@@ -14,9 +19,12 @@ This paper proposes a Fast Region-based Convolutional Network method (Fast R-CNN
 
 ## Introduction
 
-Before training the Fast R-CNN, users should first train an [RPN](../rpn/README.md), and use the RPN to extract the region proposals.
-The region proposals can be obtained by setting `DumpProposals` pseudo metric. The dumped results is a `dict(file_name: pred_instance)`.
-The `pred_instance` is an `InstanceData` containing the sorted boxes and scores predicted by RPN. We provide example of dumping proposals in [RPN config](../rpn/rpn_r50_fpn_1x_coco.py).
+Before training the Fast R-CNN, users should first train an [RPN](../rpn/README.md), and use the RPN to extract the
+region proposals.
+The region proposals can be obtained by setting `DumpProposals` pseudo metric. The dumped results is
+a `dict(file_name: pred_instance)`.
+The `pred_instance` is an `InstanceData` containing the sorted boxes and scores predicted by RPN. We provide example of
+dumping proposals in [RPN config](../rpn/rpn_r50_fpn_1x_coco.py).
 
 - First, it should be obtained the region proposals in both training and validation (or testing) set.
   change the type of `test_evaluator` to `DumpProposals` in the RPN config to get the region proposals as below:
@@ -59,9 +67,11 @@ The `pred_instance` is an `InstanceData` containing the sorted boxes and scores 
       8
   ```
 
-  Users can refer to [test tutorial](https://mmdetection.readthedocs.io/en/latest/user_guides/test.html) for more details.
+  Users can refer to [test tutorial](https://mmdetection.readthedocs.io/en/latest/user_guides/test.html) for more
+  details.
 
-- Then, modify the path of `proposal_file` in the dataset and using `ProposalBroadcaster` to process both ground truth bounding boxes and region proposals in pipelines.
+- Then, modify the path of `proposal_file` in the dataset and using `ProposalBroadcaster` to process both ground truth
+  bounding boxes and region proposals in pipelines.
   An example of Fast R-CNN important setting can be seen as below:
 
   ```python

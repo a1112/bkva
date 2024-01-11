@@ -45,7 +45,7 @@ model = dict(
             type='mmpretrain.ResNet',
             depth=50,
             num_stages=4,
-            out_indices=(3, ),
+            out_indices=(3,),
             style='pytorch'),
         neck=dict(type='GlobalAveragePooling', kernel_size=(8, 4), stride=1),
         head=dict(

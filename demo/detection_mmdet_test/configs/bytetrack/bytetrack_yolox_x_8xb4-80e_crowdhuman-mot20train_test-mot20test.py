@@ -76,7 +76,7 @@ train_dataloader = dict(
                     # TODO: mmdet use img as key, but img_path is needed
                     data_prefix=dict(img='train'),
                     filter_cfg=dict(filter_empty_gt=True, min_size=32),
-                    metainfo=dict(classes=('pedestrian', )),
+                    metainfo=dict(classes=('pedestrian',)),
                     pipeline=[
                         dict(
                             type='LoadImageFromFile',
@@ -89,7 +89,7 @@ train_dataloader = dict(
                     ann_file='annotations/crowdhuman_train.json',
                     data_prefix=dict(img='train'),
                     filter_cfg=dict(filter_empty_gt=True, min_size=32),
-                    metainfo=dict(classes=('pedestrian', )),
+                    metainfo=dict(classes=('pedestrian',)),
                     pipeline=[
                         dict(
                             type='LoadImageFromFile',
@@ -102,7 +102,7 @@ train_dataloader = dict(
                     ann_file='annotations/crowdhuman_val.json',
                     data_prefix=dict(img='val'),
                     filter_cfg=dict(filter_empty_gt=True, min_size=32),
-                    metainfo=dict(classes=('pedestrian', )),
+                    metainfo=dict(classes=('pedestrian',)),
                     pipeline=[
                         dict(
                             type='LoadImageFromFile',

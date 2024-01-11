@@ -10,7 +10,7 @@ model = dict(
         type='PyramidVisionTransformer',
         num_layers=[2, 2, 2, 2],
         init_cfg=dict(checkpoint='https://github.com/whai362/PVT/'
-                      'releases/download/v2/pvt_tiny.pth')),
+                                 'releases/download/v2/pvt_tiny.pth')),
     neck=dict(in_channels=[64, 128, 320, 512]))
 # optimizer
 optim_wrapper = dict(

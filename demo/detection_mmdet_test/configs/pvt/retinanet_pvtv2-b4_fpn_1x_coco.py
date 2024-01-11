@@ -4,7 +4,7 @@ model = dict(
         embed_dims=64,
         num_layers=[3, 8, 27, 3],
         init_cfg=dict(checkpoint='https://github.com/whai362/PVT/'
-                      'releases/download/v2/pvt_v2_b4.pth')),
+                                 'releases/download/v2/pvt_v2_b4.pth')),
     neck=dict(in_channels=[64, 128, 320, 512]))
 # optimizer
 optim_wrapper = dict(

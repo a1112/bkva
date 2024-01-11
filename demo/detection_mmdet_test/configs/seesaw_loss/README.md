@@ -6,7 +6,18 @@
 
 ## Abstract
 
-Instance segmentation has witnessed a remarkable progress on class-balanced benchmarks. However, they fail to perform as accurately in real-world scenarios, where the category distribution of objects naturally comes with a long tail. Instances of head classes dominate a long-tailed dataset and they serve as negative samples of tail categories. The overwhelming gradients of negative samples on tail classes lead to a biased learning process for classifiers. Consequently, objects of tail categories are more likely to be misclassified as backgrounds or head categories. To tackle this problem, we propose Seesaw Loss to dynamically re-balance gradients of positive and negative samples for each category, with two complementary factors, i.e., mitigation factor and compensation factor. The mitigation factor reduces punishments to tail categories w.r.t. the ratio of cumulative training instances between different categories. Meanwhile, the compensation factor increases the penalty of misclassified instances to avoid false positives of tail categories. We conduct extensive experiments on Seesaw Loss with mainstream frameworks and different data sampling strategies. With a simple end-to-end training pipeline, Seesaw Loss obtains significant gains over Cross-Entropy Loss, and achieves state-of-the-art performance on LVIS dataset without bells and whistles.
+Instance segmentation has witnessed a remarkable progress on class-balanced benchmarks. However, they fail to perform as
+accurately in real-world scenarios, where the category distribution of objects naturally comes with a long tail.
+Instances of head classes dominate a long-tailed dataset and they serve as negative samples of tail categories. The
+overwhelming gradients of negative samples on tail classes lead to a biased learning process for classifiers.
+Consequently, objects of tail categories are more likely to be misclassified as backgrounds or head categories. To
+tackle this problem, we propose Seesaw Loss to dynamically re-balance gradients of positive and negative samples for
+each category, with two complementary factors, i.e., mitigation factor and compensation factor. The mitigation factor
+reduces punishments to tail categories w.r.t. the ratio of cumulative training instances between different categories.
+Meanwhile, the compensation factor increases the penalty of misclassified instances to avoid false positives of tail
+categories. We conduct extensive experiments on Seesaw Loss with mainstream frameworks and different data sampling
+strategies. With a simple end-to-end training pipeline, Seesaw Loss obtains significant gains over Cross-Entropy Loss,
+and achieves state-of-the-art performance on LVIS dataset without bells and whistles.
 
 <div align=center>
 <img src="https://user-images.githubusercontent.com/40661020/143974715-d181abe5-d0a2-40d3-a2bd-17d8c60b89b8.png"/>
@@ -14,12 +25,13 @@ Instance segmentation has witnessed a remarkable progress on class-balanced benc
 
 - Please setup [LVIS dataset](../lvis/README.md) for MMDetection.
 
-- RFS indicates to use oversample strategy [here](../../docs/tutorials/customipredataset.md#class-balanced-dataset) with oversample threshold `1e-3`.
+- RFS indicates to use oversample strategy [here](../../docs/tutorials/customipredataset.md#class-balanced-dataset) with
+  oversample threshold `1e-3`.
 
 ## Results and models of Seasaw Loss on LVIS v1 dataset
 
 |       Method       | Backbone  |  Style  | Lr schd | Data Sampler | Norm Mask | box AP | mask AP |                                           Config                                           |                                                                                                                                                              Download                                                                                                                                                              |
-| :----------------: | :-------: | :-----: | :-----: | :----------: | :-------: | :----: | :-----: | :----------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:------------------:|:---------:|:-------:|:-------:|:------------:|:---------:|:------:|:-------:|:------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |     Mask R-CNN     | R-50-FPN  | pytorch |   2x    |    random    |     N     |  25.6  |  25.0   |             [config](./mask-rcnn_r50_fpn_seesaw-loss_random-ms-2x_lvis-v1.py)              |                          [model](https://download.openmmlab.com/mmdetection/v2.0/seesaw_loss/mask_rcnn_r50_fpn_random_seesaw_loss_mstrain_2x_lvis_v1-a698dd3d.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/seesaw_loss/mask_rcnn_r50_fpn_random_seesaw_loss_mstrain_2x_lvis_v1.log.json)                          |
 |     Mask R-CNN     | R-50-FPN  | pytorch |   2x    |    random    |     Y     |  25.6  |  25.4   |       [config](./mask-rcnn_r50_fpn_seesaw-loss-normed-mask_random-ms-2x_lvis-v1.py)        |              [model](https://download.openmmlab.com/mmdetection/v2.0/seesaw_loss/mask_rcnn_r50_fpn_random_seesaw_loss_normed_mask_mstrain_2x_lvis_v1-a1c11314.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/seesaw_loss/mask_rcnn_r50_fpn_random_seesaw_loss_normed_mask_mstrain_2x_lvis_v1.log.json)              |
 |     Mask R-CNN     | R-101-FPN | pytorch |   2x    |    random    |     N     |  27.4  |  26.7   |             [config](./mask-rcnn_r101_fpn_seesaw-loss_random-ms-2x_lvis-v1.py)             |                         [model](https://download.openmmlab.com/mmdetection/v2.0/seesaw_loss/mask_rcnn_r101_fpn_random_seesaw_loss_mstrain_2x_lvis_v1-8e6e6dd5.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/seesaw_loss/mask_rcnn_r101_fpn_random_seesaw_loss_mstrain_2x_lvis_v1.log.json)                         |
@@ -35,7 +47,8 @@ Instance segmentation has witnessed a remarkable progress on class-balanced benc
 
 ## Citation
 
-We provide config files to reproduce the instance segmentation performance in the CVPR 2021 paper for [Seesaw Loss for Long-Tailed Instance Segmentation](https://arxiv.org/abs/2008.10032).
+We provide config files to reproduce the instance segmentation performance in the CVPR 2021 paper
+for [Seesaw Loss for Long-Tailed Instance Segmentation](https://arxiv.org/abs/2008.10032).
 
 ```latex
 @inproceedings{wang2021seesaw,

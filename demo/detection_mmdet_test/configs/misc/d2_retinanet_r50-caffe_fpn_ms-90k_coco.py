@@ -25,7 +25,7 @@ model = dict(
         fpn=dict(in_features=['res3', 'res4', 'res5'], out_channels=256),
         anchor_generator=dict(
             name='DefaultAnchorGenerator',
-            sizes=[[x, x * 2**(1.0 / 3), x * 2**(2.0 / 3)]
+            sizes=[[x, x * 2 ** (1.0 / 3), x * 2 ** (2.0 / 3)]
                    for x in [32, 64, 128, 256, 512]],
             aspect_ratios=[[0.5, 1.0, 2.0]],
             angles=[[-90, 0, 90]]),

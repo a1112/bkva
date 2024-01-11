@@ -10,7 +10,7 @@ val_dataloader = dict(dataset=dict(data_root=data_root))
 test_dataloader = val_dataloader
 
 val_evaluator = dict(ann_file=data_root +
-                     'annotations/half-val_cocoformat.json')
+                              'annotations/half-val_cocoformat.json')
 test_evaluator = val_evaluator
 
 # training schedule for 8e

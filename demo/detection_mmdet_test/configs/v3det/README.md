@@ -35,13 +35,26 @@
 
 ## Abstract
 
-Recent advances in detecting arbitrary objects in the real world are trained and evaluated on object detection datasets with a relatively restricted vocabulary. To facilitate the development of more general visual object detection, we propose V3Det, a vast vocabulary visual detection dataset with precisely annotated bounding boxes on massive images. V3Det has several appealing properties: 1) Vast Vocabulary: It contains bounding boxes of objects from 13,204 categories on real-world images, which is 10 times larger than the existing large vocabulary object detection dataset, e.g., LVIS. 2) Hierarchical Category Organization: The vast vocabulary of V3Det is organized by a hierarchical category tree which annotates the inclusion relationship among categories, encouraging the exploration of category relationships in vast and open vocabulary object detection. 3) Rich Annotations: V3Det comprises precisely annotated objects in 243k images and professional descriptions of each category written by human experts and a powerful chatbot. By offering a vast exploration space, V3Det enables extensive benchmarks on both vast and open vocabulary object detection, leading to new observations, practices, and insights for future research. It has the potential to serve as a cornerstone dataset for developing more general visual perception systems. V3Det is available at https://v3det.openxlab.org.cn/.
+Recent advances in detecting arbitrary objects in the real world are trained and evaluated on object detection datasets
+with a relatively restricted vocabulary. To facilitate the development of more general visual object detection, we
+propose V3Det, a vast vocabulary visual detection dataset with precisely annotated bounding boxes on massive images.
+V3Det has several appealing properties: 1) Vast Vocabulary: It contains bounding boxes of objects from 13,204 categories
+on real-world images, which is 10 times larger than the existing large vocabulary object detection dataset, e.g., LVIS.
+2) Hierarchical Category Organization: The vast vocabulary of V3Det is organized by a hierarchical category tree which
+annotates the inclusion relationship among categories, encouraging the exploration of category relationships in vast and
+open vocabulary object detection. 3) Rich Annotations: V3Det comprises precisely annotated objects in 243k images and
+professional descriptions of each category written by human experts and a powerful chatbot. By offering a vast
+exploration space, V3Det enables extensive benchmarks on both vast and open vocabulary object detection, leading to new
+observations, practices, and insights for future research. It has the potential to serve as a cornerstone dataset for
+developing more general visual perception systems. V3Det is available at https://v3det.openxlab.org.cn/.
 
 ## Prepare Dataset
 
-Please download and prepare V3Det Dataset at [V3Det Homepage](https://v3det.openxlab.org.cn/) and [V3Det Github](https://github.com/V3Det/V3Det).
+Please download and prepare V3Det Dataset at [V3Det Homepage](https://v3det.openxlab.org.cn/)
+and [V3Det Github](https://github.com/V3Det/V3Det).
 
-The data includes a training set, a validation set, comprising 13,204 categories. The training set consists of 183,354 images, while the validation set has 29,821 images. The data organization is:
+The data includes a training set, a validation set, comprising 13,204 categories. The training set consists of 183,354
+images, while the validation set has 29,821 images. The data organization is:
 
 ```
 data/
@@ -61,7 +74,7 @@ data/
 ## Results and Models
 
 | Backbone |      Model      | Lr schd | box AP |                                     Config                                     |                                                          Download                                                           |
-| :------: | :-------------: | :-----: | :----: | :----------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: |
+|:--------:|:---------------:|:-------:|:------:|:------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|
 |   R-50   |  Faster R-CNN   |   2x    |  25.4  |       [config](./faster_rcnn_r50_fpn_8x4_sample1e-3_mstrain_v3det_2x.py)       |  [model](https://download.openxlab.org.cn/models/V3Det/V3Det/weight//faster_rcnn_r50_fpn_8x4_sample1e-3_mstrain_v3det_2x)   |
 |   R-50   |  Cascade R-CNN  |   2x    |  31.6  |      [config](./cascade_rcnn_r50_fpn_8x4_sample1e-3_mstrain_v3det_2x.py)       |  [model](https://download.openxlab.org.cn/models/V3Det/V3Det/weight//cascade_rcnn_r50_fpn_8x4_sample1e-3_mstrain_v3det_2x)  |
 |   R-50   |      FCOS       |   2x    |  9.4   |          [config](./fcos_r50_fpn_8x4_sample1e-3_mstrain_v3det_2x.py)           |      [model](https://download.openxlab.org.cn/models/V3Det/V3Det/weight//fcos_r50_fpn_8x4_sample1e-3_mstrain_v3det_2x)      |

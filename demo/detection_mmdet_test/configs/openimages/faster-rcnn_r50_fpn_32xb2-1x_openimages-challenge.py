@@ -22,7 +22,7 @@ val_dataloader = dict(
         hierarchy_file='challenge2019/class_label_tree.np',
         meta_file='challenge2019/challenge-2019-validation-metas.pkl',
         image_level_ann_file='challenge2019/challenge-2019-validation-'
-        'detection-human-imagelabels.csv'))
+                             'detection-human-imagelabels.csv'))
 test_dataloader = dict(
     dataset=dict(
         type=dataset_type,
@@ -31,7 +31,7 @@ test_dataloader = dict(
         hierarchy_file='challenge2019/class_label_tree.np',
         meta_file='challenge2019/challenge-2019-validation-metas.pkl',
         image_level_ann_file='challenge2019/challenge-2019-validation-'
-        'detection-human-imagelabels.csv'))
+                             'detection-human-imagelabels.csv'))
 
 # NOTE: `auto_scale_lr` is for automatically scaling LR,
 # USER SHOULD NOT CHANGE ITS VALUES.

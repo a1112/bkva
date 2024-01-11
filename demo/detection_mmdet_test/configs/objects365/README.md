@@ -12,7 +12,10 @@
 
 [Objects365 Dataset V1](http://www.objects365.org/overview.html) is a brand new dataset,
 designed to spur object detection research with a focus on diverse objects in the Wild.
-It has 365 object categories over 600K training images. More than 10 million, high-quality bounding boxes are manually labeled through a three-step, carefully designed annotation pipeline. It is the largest object detection dataset (with full annotation) so far and establishes a more challenging benchmark for the community. Objects365 can serve as a better feature learning dataset for localization-sensitive tasks like object detection
+It has 365 object categories over 600K training images. More than 10 million, high-quality bounding boxes are manually
+labeled through a three-step, carefully designed annotation pipeline. It is the largest object detection dataset (with
+full annotation) so far and establishes a more challenging benchmark for the community. Objects365 can serve as a better
+feature learning dataset for localization-sensitive tasks like object detection
 and semantic segmentation.
 
 <!-- [IMAGE] -->
@@ -24,8 +27,10 @@ and semantic segmentation.
 #### Objects365 Dataset V2
 
 [Objects365 Dataset V2](http://www.objects365.org/overview.html) is based on the V1 release of the Objects365 dataset.
-Objects 365 annotated 365 object classes on more than 1800k images, with more than 29 million bounding boxes in the training set, surpassing PASCAL VOC, ImageNet, and COCO datasets.
-Objects 365 includes 11 categories of people, clothing, living room, bathroom, kitchen, office/medical, electrical appliances, transportation, food, animals, sports/musical instruments, and each category has dozens of subcategories.
+Objects 365 annotated 365 object classes on more than 1800k images, with more than 29 million bounding boxes in the
+training set, surpassing PASCAL VOC, ImageNet, and COCO datasets.
+Objects 365 includes 11 categories of people, clothing, living room, bathroom, kitchen, office/medical, electrical
+appliances, transportation, food, animals, sports/musical instruments, and each category has dozens of subcategories.
 
 ## Citation
 
@@ -41,7 +46,8 @@ Objects 365 includes 11 categories of people, clothing, living room, bathroom, k
 
 ## Prepare Dataset
 
-1. You need to download and extract Objects365 dataset. Users can download Objects365 V2 by using `tools/misc/download_dataset.py`.
+1. You need to download and extract Objects365 dataset. Users can download Objects365 V2 by
+   using `tools/misc/download_dataset.py`.
 
    **Usage**
 
@@ -52,7 +58,8 @@ Objects 365 includes 11 categories of people, clothing, living room, bathroom, k
    --delete  # Optional, delete the download zip file
    ```
 
-   **Note:** There is no download link for Objects365 V1 right now. If you would like to download Objects365-V1, please visit [official website](http://www.objects365.org/) to concat the author.
+   **Note:** There is no download link for Objects365 V1 right now. If you would like to download Objects365-V1, please
+   visit [official website](http://www.objects365.org/) to concat the author.
 
 2. The directory should be like this:
 
@@ -88,7 +95,7 @@ Objects 365 includes 11 categories of people, clothing, living room, bathroom, k
 ### Objects365 V1
 
 | Architecture | Backbone |  Style  | Lr schd | Mem (GB) | box AP |                                                              Config                                                               |                                                                                                                                                                                Download                                                                                                                                                                                |
-| :----------: | :------: | :-----: | :-----: | :------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:------------:|:--------:|:-------:|:-------:|:--------:|:------:|:---------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | Faster R-CNN |   R-50   | pytorch |   1x    |    -     |  19.6  |   [config](https://github.com/open-mmlab/mmdetection/tree/main/configs/objects365/faster-rcnn_r50_fpn_16xb4-1x_objects365v1.py)   |           [model](https://download.openmmlab.com/mmdetection/v2.0/objects365/faster_rcnn_r50_fpn_16x4_1x_obj365v1/faster_rcnn_r50_fpn_16x4_1x_obj365v1_20221219_181226-9ff10f95.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/objects365/faster_rcnn_r50_fpn_16x4_1x_obj365v1/faster_rcnn_r50_fpn_16x4_1x_obj365v1_20221219_181226.log.json)           |
 | Faster R-CNN |   R-50   | pytorch |  1350K  |    -     |  22.3  | [config](https://github.com/open-mmlab/mmdetection/tree/main/configs/objects365/faster-rcnn_r50-syncbn_fpn_1350k_objects365v1.py) | [model](https://download.openmmlab.com/mmdetection/v2.0/objects365/faster_rcnn_r50_fpn_syncbn_1350k_obj365v1/faster_rcnn_r50_fpn_syncbn_1350k_obj365v1_20220510_142457-337d8965.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/objects365/faster_rcnn_r50_fpn_syncbn_1350k_obj365v1/faster_rcnn_r50_fpn_syncbn_1350k_obj365v1_20220510_142457.log.json) |
 |  Retinanet   |   R-50   | pytorch |   1x    |    -     |  14.8  |       [config](https://github.com/open-mmlab/mmdetection/tree/main/configs/objects365/retinanet_r50_fpn_1x_objects365v1.py)       |                         [model](https://download.openmmlab.com/mmdetection/v2.0/objects365/retinanet_r50_fpn_1x_obj365v1/retinanet_r50_fpn_1x_obj365v1_20221219_181859-ba3e3dd5.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/objects365/retinanet_r50_fpn_1x_obj365v1/retinanet_r50_fpn_1x_obj365v1_20221219_181859.log.json)                         |
@@ -97,6 +104,6 @@ Objects 365 includes 11 categories of people, clothing, living room, bathroom, k
 ### Objects365 V2
 
 | Architecture | Backbone |  Style  | Lr schd | Mem (GB) | box AP |                                                            Config                                                             |                                                                                                                                                                      Download                                                                                                                                                                      |
-| :----------: | :------: | :-----: | :-----: | :------: | :----: | :---------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:------------:|:--------:|:-------:|:-------:|:--------:|:------:|:-----------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | Faster R-CNN |   R-50   | pytorch |   1x    |    -     |  19.8  | [config](https://github.com/open-mmlab/mmdetection/tree/main/configs/objects365/faster-rcnn_r50_fpn_16xb4-1x_objects365v2.py) | [model](https://download.openmmlab.com/mmdetection/v2.0/objects365/faster_rcnn_r50_fpn_16x4_1x_obj365v2/faster_rcnn_r50_fpn_16x4_1x_obj365v2_20221220_175040-5910b015.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/objects365/faster_rcnn_r50_fpn_16x4_1x_obj365v2/faster_rcnn_r50_fpn_16x4_1x_obj365v2_20221220_175040.log.json) |
 |  Retinanet   |   R-50   | pytorch |   1x    |    -     |  16.7  |     [config](https://github.com/open-mmlab/mmdetection/tree/main/configs/objects365/retinanet_r50_fpn_1x_objects365v2.py)     |               [model](https://download.openmmlab.com/mmdetection/v2.0/objects365/retinanet_r50_fpn_1x_obj365v2/retinanet_r50_fpn_1x_obj365v2_20221223_122105-d9b191f1.pth) \| [log](https://download.openmmlab.com/mmdetection/v2.0/objects365/retinanet_r50_fpn_1x_obj365v2/retinanet_r50_fpn_1x_obj365v2_20221223_122105.log.json)               |

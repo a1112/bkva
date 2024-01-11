@@ -4,7 +4,20 @@
 
 <!-- [ABSTRACT] -->
 
-Existing Multi-Object Tracking (MOT) methods can be roughly classified as tracking-by-detection and joint-detection-association paradigms. Although the latter has elicited more attention and demonstrates comparable performance relative to the former, we claim that the tracking-by-detection paradigm is still the optimal solution in terms of tracking accuracy. In this paper, we revisit the classic tracker DeepSORT and upgrade it from various aspects, i.e., detection, embedding and association. The resulting tracker, called StrongSORT, sets new HOTA and IDF1 records on MOT17 and MOT20. We also present two lightweight and plug-and-play algorithms to further refine the tracking results. Firstly, an appearance-free link model (AFLink) is proposed to associate short tracklets into complete trajectories. To the best of our knowledge, this is the first global link model without appearance information. Secondly, we propose Gaussian-smoothed interpolation (GSI) to compensate for missing detections. Instead of ignoring motion information like linear interpolation, GSI is based on the Gaussian process regression algorithm and can achieve more accurate localizations. Moreover, AFLink and GSI can be plugged into various trackers with a negligible extra computational cost (591.9 and 140.9 Hz, respectively, on MOT17). By integrating StrongSORT with the two algorithms, the final tracker StrongSORT++ ranks first on MOT17 and MOT20 in terms of HOTA and IDF1 metrics and surpasses the second-place one by 1.3 - 2.2. Code will be released soon.
+Existing Multi-Object Tracking (MOT) methods can be roughly classified as tracking-by-detection and
+joint-detection-association paradigms. Although the latter has elicited more attention and demonstrates comparable
+performance relative to the former, we claim that the tracking-by-detection paradigm is still the optimal solution in
+terms of tracking accuracy. In this paper, we revisit the classic tracker DeepSORT and upgrade it from various aspects,
+i.e., detection, embedding and association. The resulting tracker, called StrongSORT, sets new HOTA and IDF1 records on
+MOT17 and MOT20. We also present two lightweight and plug-and-play algorithms to further refine the tracking results.
+Firstly, an appearance-free link model (AFLink) is proposed to associate short tracklets into complete trajectories. To
+the best of our knowledge, this is the first global link model without appearance information. Secondly, we propose
+Gaussian-smoothed interpolation (GSI) to compensate for missing detections. Instead of ignoring motion information like
+linear interpolation, GSI is based on the Gaussian process regression algorithm and can achieve more accurate
+localizations. Moreover, AFLink and GSI can be plugged into various trackers with a negligible extra computational
+cost (591.9 and 140.9 Hz, respectively, on MOT17). By integrating StrongSORT with the two algorithms, the final tracker
+StrongSORT++ ranks first on MOT17 and MOT20 in terms of HOTA and IDF1 metrics and surpasses the second-place one by
+1.3 - 2.2. Code will be released soon.
 
 <!-- [IMAGE] -->
 
@@ -28,13 +41,13 @@ Existing Multi-Object Tracking (MOT) methods can be roughly classified as tracki
 ## Results and models on MOT17
 
 |    Method    | Detector | ReID |           Train Set           |    Test Set    | Public | Inf time (fps) | HOTA | MOTA | IDF1 |  FP   |  FN   | IDSw. |                                        Config                                        |                                                                                                                                                                                   Download                                                                                                                                                                                    |
-| :----------: | :------: | :--: | :---------------------------: | :------------: | :----: | :------------: | :--: | :--: | :--: | :---: | :---: | :---: | :----------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:------------:|:--------:|:----:|:-----------------------------:|:--------------:|:------:|:--------------:|:----:|:----:|:----:|:-----:|:-----:|:-----:|:------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | StrongSORT++ | YOLOX-X  | R50  | CrowdHuman + MOT17-half-train | MOT17-half-val |   N    |       -        | 70.9 | 78.4 | 83.3 | 15237 | 19035 |  582  | [config](strongsort_yolox_x_8xb4-80e_crowdhuman-mot17halftrain_test-mot17halfval.py) | [detector](https://download.openmmlab.com/mmtracking/mot/strongsort/mot_dataset/yolox_x_crowdhuman_mot17-private-half_20220812_192036-b6c9ce9a.pth) [reid](https://download.openmmlab.com/mmtracking/mot/reid/reid_r50_6e_mot17-4bf6b63d.pth) [AFLink](https://download.openmmlab.com/mmtracking/mot/strongsort/mot_dataset/aflink_motchallenge_20220812_190310-a7578ad3.pth) |
 
 ## Results and models on MOT20
 
 |    Method    | Detector | ReID |        Train Set         |  Test Set  | Public | Inf time (fps) | HOTA | MOTA | IDF1 |  FP   |  FN   | IDSw. |                                    Config                                     |                                                                                                                                                                                         Download                                                                                                                                                                                         |
-| :----------: | :------: | :--: | :----------------------: | :--------: | :----: | :------------: | :--: | :--: | :--: | :---: | :---: | :---: | :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|:------------:|:--------:|:----:|:------------------------:|:----------:|:------:|:--------------:|:----:|:----:|:----:|:-----:|:-----:|:-----:|:-----------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | StrongSORT++ | YOLOX-X  | R50  | CrowdHuman + MOT20-train | MOT20-test |   N    |       -        | 62.9 | 75.5 | 77.3 | 29043 | 96155 | 1640  | [config](strongsort_yolox_x_8xb4-80e_crowdhuman-mot20train_test-mot20test.py) | [detector](https://download.openmmlab.com/mmtracking/mot/strongsort/mot_dataset/yolox_x_crowdhuman_mot20-private_20220812_192123-77c014de.pth) [reid](https://download.openmmlab.com/mmtracking/mot/reid/reid_r50_6e_mot20_20210803_212426-c83b1c01.pth) [AFLink](https://download.openmmlab.com/mmtracking/mot/strongsort/mot_dataset/aflink_motchallenge_20220812_190310-a7578ad3.pth) |
 
 ## Get started
@@ -105,4 +118,5 @@ Use a single GPU to predict a video and save it as a video.
 python demo/mot_demo.py demo/demo_mot.mp4 configs/strongsort/strongsort_yolox_x_8xb4-80e_crowdhuman-mot17halftrain_test-mot17halfval.py --detector ${CHECKPOINT_FILE} --reid ${CHECKPOINT_PATH} --out mot.mp4
 ```
 
-If you want to know about more detailed usage of `mot_demo.py`, please refer to this [document](../../docs/en/user_guides/tracking_inference.md).
+If you want to know about more detailed usage of `mot_demo.py`, please refer to
+this [document](../../docs/en/user_guides/tracking_inference.md).

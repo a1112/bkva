@@ -13,7 +13,8 @@ detector.test_cfg.nms.update(dict(iou_threshold=0.7))
 detector['init_cfg'] = dict(
     type='Pretrained',
     checkpoint=  # noqa: E251
-    'https://download.openmmlab.com/mmdetection/v2.0/yolox/yolox_x_8x8_300e_coco/yolox_x_8x8_300e_coco_20211126_140254-1ef88d67.pth'  # noqa: E501
+    'https://download.openmmlab.com/mmdetection/v2.0/yolox/yolox_x_8x8_300e_coco/yolox_x_8x8_300e_coco_20211126_140254-1ef88d67.pth'
+    # noqa: E501
 )
 del _base_.model
 
@@ -105,7 +106,7 @@ train_dataloader = dict(
                     ann_file='annotations/half-train_cocoformat.json',
                     data_prefix=dict(img='train'),
                     filter_cfg=dict(filter_empty_gt=True, min_size=32),
-                    metainfo=dict(classes=('pedestrian', )),
+                    metainfo=dict(classes=('pedestrian',)),
                     pipeline=[
                         dict(
                             type='LoadImageFromFile',
@@ -118,7 +119,7 @@ train_dataloader = dict(
                     ann_file='annotations/crowdhuman_train.json',
                     data_prefix=dict(img='train'),
                     filter_cfg=dict(filter_empty_gt=True, min_size=32),
-                    metainfo=dict(classes=('pedestrian', )),
+                    metainfo=dict(classes=('pedestrian',)),
                     pipeline=[
                         dict(
                             type='LoadImageFromFile',
@@ -131,7 +132,7 @@ train_dataloader = dict(
                     ann_file='annotations/crowdhuman_val.json',
                     data_prefix=dict(img='val'),
                     filter_cfg=dict(filter_empty_gt=True, min_size=32),
-                    metainfo=dict(classes=('pedestrian', )),
+                    metainfo=dict(classes=('pedestrian',)),
                     pipeline=[
                         dict(
                             type='LoadImageFromFile',
