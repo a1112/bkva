@@ -5,3 +5,9 @@
 [submodule "git/classification/pytorch-image-models"]
 	path = git/classification/pytorch-image-models
 	url = https://github.com/huggingface/pytorch-image-models
+[submodule "git/detection/yolo/yolov5"]
+	path = git/detection/yolo/yolov5
+	url = https://github.com/ultralytics/yolov5
+[submodule "git/detection/yolo/ultralytics"]
+	path = git/detection/yolo/ultralytics
+	url = https://github.com/ultralytics/ultralytics
