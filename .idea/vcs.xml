@@ -3,11 +3,11 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/BKVisionAlgorithms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/git/classification/pytorch-image-models" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/git/detection" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/git/detection/mmdetection" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/git/detection/yolo/YOLOX" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/git/detection/yolo/ultralytics" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/git/detection/yolo/yolov5" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/git/pytorch-image-models" vcs="Git" />
   </component>
 </project>
