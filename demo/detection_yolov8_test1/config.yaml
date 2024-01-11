@@ -1,0 +1,16 @@
+#--encoding:utf-8--
+#
+#
+#
+extends: base.yaml  # extend base.yaml
+img-size: 640       # inference size (pixels)
+conf-thres: 0.25    # confidence threshold
+iou-thres: 0.45     # NMS IoU threshold
+max-det: 1000       # maximum detections per image
+device: 0           # cuda device, i.e. 0 or 0,1,2,3 or cpu
+batch-size: 32      # inference batch size
+
+debug: true        # debug mode
+
+save: true
+save-dir: runs/detect/exp   # save results to project/name

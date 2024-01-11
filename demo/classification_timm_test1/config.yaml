@@ -1,0 +1,16 @@
+#--encoding:utf-8--
+#  type: classification
+
+framework: timm
+name: caformer_s36.sail_in22k_ft_in1k
+weights: caformer_s36.sail_in22k_ft_in1k.tar
+names: Steel_RZ.yaml    # dataset labels
+
+num_classes: 1000              # number of classes
+img-size: 640       # inference size (pixels)
+device: 0           # cuda device, i.e. 0 or 0,1,2,3 or cpu
+view-img: false     # show results
+save-txt: true      # save results to *.txt
+batch-size: 64      # inference batch size
+
+debug: true        # debug mode

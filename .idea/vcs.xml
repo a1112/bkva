@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/BKVisionAlgorithms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/git/detection" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/git/detection/mmdetection" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/git/detection/yolo/YOLOX" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/git/detection/yolo/ultralytics" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/git/detection/yolo/yolov5" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/git/pytorch-image-models" vcs="Git" />
+  </component>
+</project>
