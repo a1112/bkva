@@ -14,3 +14,9 @@
 [submodule "git/detection/yolo/YOLOX"]
 	path = git/detection/yolo/YOLOX
 	url = https://github.com/Megvii-BaseDetection/YOLOX
+[submodule "git/detection3D/MMDetection3D"]
+	path = git/detection3D/MMDetection3D
+	url = https://github.com/open-mmlab/mmdetection3d
+[submodule "git/Paddle"]
+	path = git/Paddle
+	url = https://github.com/PaddlePaddle/Paddle

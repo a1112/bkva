@@ -11,3 +11,8 @@ def register_model():
 def crate_model(property_: BaseProperty):
     models = SingModelAll()
     return models.create(property_)
+
+
+def get_model_list():
+    models = SingModelAll()
+    return models.get_model_list()

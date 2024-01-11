@@ -6,7 +6,7 @@ BKVisionAlgorithms 是一个为整合各种计算机视觉算法而设计的Pyth
 
 ## 算法支持：
 
-    图像分类：timm(timm 本身就是分类器整合框架,timm支持 1000+ 分类器模型结构)
+    图像分类：timm
     对象检测：
         - yolo: yolov5, yolovX,yolov8
         - transformer: swin,dino
@@ -19,7 +19,10 @@ BKVisionAlgorithms 是一个为整合各种计算机视觉算法而设计的Pyth
 ## 安装
 
 ```bash
-pip install bkvisionalgorithms
+git clone https://github.com/a1112/bkva.git
+cd bkva
+pip install -r requirements.txt
+python setup.py install
 ```
 
 ## 快速开始
@@ -62,37 +65,21 @@ if __name__ == "__main__":
 ```python
 from tqdm import tqdm
 
-from BKVisionAlgorithms.base.property import DetectionProperty, DetectionResult, ImageFolderLoader, ImageAdjustSplit,
-
-ImageDetectionDirector, AlgorithmFactory
-
-from ultralytics.utils import USER_CONFIG_DIR
+from BKVisionAlgorithms import crate_model
+from BKVisionAlgorithms.base.property import DetectionProperty, DetectionResult, ImageFolderLoader, ImageAdjustSplit, \
+    ImageDetectionDirector
 
 if __name__ == "__main__":
-    # use AlgorithmFactory to create a detection model
-    property = DetectionProperty("demo/detection_yolov5_test1")
-
-    # show and save control not use Thread please don't set True in production environment
-    # if character is chinese please install font Arial.Unicode.ttf in /font folder
-
-    if property.debug:
-        USER_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-        property.save_dir = USER_CONFIG_DIR
-        property.show = True
-        property.show_all = False
-        property.save = True
-        property.save_all = False
-
-    detectionModel = AlgorithmFactory().create(property)
-    print(detectionModel)
-    imageFolderLoader = ImageFolderLoader(r"E:\clfData\鼎信\分割\image")
-    print(imageFolderLoader)
+    property_ = DetectionProperty("../demo/detection_yolov5_test1")
+    detectionModel = crate_model(property_)
+    imageFolderLoader = ImageFolderLoader(r"E:\clfData\鼎信\分割\image", remove=False)
     director = ImageDetectionDirector(imageFolderLoader, detectionModel, ImageAdjustSplit())
-    print(director)
-    for result in tqdm(director):
-        result: DetectionResult
-    imageFolderLoader.close()
-    print("end")
+    for results in tqdm(director):
+        for result in results:
+            result: DetectionResult
+            result.showType = "cv2"
+            # if result.hasObject():
+            result.show()
 ```
 
 ## 核心模块
@@ -100,8 +87,15 @@ if __name__ == "__main__":
 ```python
     algorithms.base.property
 ```
+## 获取模型列表
 
-包含基础属性类（BaseProperty），及专用属性类（DetectionProperty 和 ClassificationProperty）
+```python
+    algorithms.get_model_list()
+```
+
+
+包含基础属性类（BaseProperty），
+及专用属性类（DetectionProperty 和 ClassificationProperty）
 
 ## 配置文件
 
@@ -136,12 +130,42 @@ debug: true        # debug mode
 # 依赖
 
 ```
-pypattyrn
-onnxruntime
-pyyaml
-torch
-timm
-tqdm
+pypattyrn~=1.2
+onnxruntime~=1.16.3
+pyyaml~=6.0.1
+torch~=2.1.0+cu121
+timm~=0.9.12
+tqdm~=4.65.2
+
+ultralytics~=8.0.234
+numpy~=1.26.3
+opencv-python~=4.8.1.78
+pillow~=10.2.0
+tabulate~=0.9.0
+loguru~=0.7.2
+pycocotools~=2.0.7
+psutil~=5.9.6
+torchvision~=0.16.0+cu121
+setuptools~=69.0.3
+matplotlib~=3.8.2
+pandas~=2.1.4
+seaborn~=0.13.1
+scipy~=1.11.4
+Flask~=2.3.2
+thop~=0.1.1.post2209072238
+addict~=2.4.0
+pytest~=7.4.4
+shapely~=2.0.2
+mmcv~=2.1.0
+mmengine~=0.10.2
+mmdet~=3.2.0
+rich~=13.4.2
+six~=1.16.0
+terminaltables~=3.1.10
+Jinja2~=3.1.2
+safetensors~=0.4.0
+filetype~=1.2.0
+lxml
 ```
 
 # 拓展

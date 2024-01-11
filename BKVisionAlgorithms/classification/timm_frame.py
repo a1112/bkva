@@ -81,25 +81,11 @@ class TimmFrame(BaseClassificationModel):
             res.append(index_value_pairs)
         return res
 
+    @staticmethod
+    def get_model_list():
+        return timm.list_models("*")
 
-if __name__ == "__main__":
-    rootFolder = Path(r"E:\clfData\r5")
-    saveFolder = rootFolder.parent / (rootFolder.name + "_ClfOut")
-    saveFolder.mkdir(exist_ok=True, parents=True)
-    fileList = list(rootFolder.glob("*.jpg"))
-    batch_cache = []
-    for index, f_ in tqdm.tqdm(enumerate(fileList)):
-        if len(batch_cache) < 10:
-            batch_cache.append(f_)
-            if index < len(fileList) - 1:
-                continue
-        reData = predictImage_clf(batch_cache)
-        for jpg_, itemData in zip(batch_cache, reData):
-            # maxItem = max(itemData)
-            maxItem = itemData
-            # index = itemData.index(maxItem)
-            index = itemData[0]
-            saveTo = saveFolder / str(index) / str(maxItem)[2]
-            saveTo.mkdir(exist_ok=True, parents=True)
-            shutil.copy(jpg_, saveTo / jpg_.name)
-        batch_cache = []
+
+
+if __name__=="__main__":
+    print(TimmFrame.get_model_list())

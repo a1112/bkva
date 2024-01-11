@@ -237,6 +237,8 @@ class ClassificationResult(BaseResult):
 
 
 class BaseModel(ABC):
+    names = []
+
     def __init__(self, property_, **kwargs):
         super().__init__(**kwargs)
         self.property = property_
@@ -255,6 +257,10 @@ class BaseModel(ABC):
     def resolverResult(self, result, images):
         ...
 
+    @staticmethod
+    def get_model_list():
+        return BaseModel.names
+
 
 class BaseDetectionModel(BaseModel):
     """
@@ -262,7 +268,18 @@ class BaseDetectionModel(BaseModel):
     detection algorithms. All detection algorithms should inherit from this
     class.
     """
-    names = []
+
+    @abstractmethod
+    def load_model(self):
+        pass
+
+    @abstractmethod
+    def predict(self, frame):
+        pass
+
+    @abstractmethod
+    def resolverResult(self, result, images):
+        pass
 
     def __init__(self, property_: DetectionProperty, **kwargs):
         """

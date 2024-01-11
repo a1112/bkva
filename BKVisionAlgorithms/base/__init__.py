@@ -41,3 +41,9 @@ class SingModelAll(metaclass=Singleton):
         if property_.framework:
             return self.models[property_.framework.lower() + "_frame"](property_)
         return self.models[property_.name.lower()](property_)
+
+    def get_model_list(self):
+        res = {}
+        for key in self.models.keys():
+            res[key] = self.models[key].get_model_list()
+        return res
