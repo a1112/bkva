@@ -11,3 +11,6 @@
 [submodule "git/detection/yolo/ultralytics"]
 	path = git/detection/yolo/ultralytics
 	url = https://github.com/ultralytics/ultralytics
+[submodule "git/detection/yolo/yolox"]
+	path = git/detection/yolo/yolox
+	url = https://github.com/Megvii-BaseDetection/YOLOX
