@@ -1,3 +1,7 @@
-[submodule "git/defection"]
-	path = git/defection
+
+[submodule "git/detection/mmdetection"]
+	path = git/detection/mmdetection
 	url = https://github.com/open-mmlab/mmdetection
+[submodule "git/classification/pytorch-image-models"]
+	path = git/classification/pytorch-image-models
+	url = https://github.com/huggingface/pytorch-image-models
