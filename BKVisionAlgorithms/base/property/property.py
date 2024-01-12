@@ -128,3 +128,21 @@ class ClassificationProperty(BaseProperty):
             f"framework={self.framework},debug={self.debug},loader={self.loader},adjust={self.adjust},"
             f"showType={self.showType},save={self.save},save_dir={self.save_dir},save_label={self.save_label},"
             f"save_null={self.save_null})")
+
+
+class SegmentationProperty(DetectionProperty):
+    def __init__(self, yaml_path: str):
+        super().__init__(yaml_path)
+        self.propertyType = "segmentation"
+        self.save_dir = self.yaml_dict.get("save-dir" f"runs/segmentation/{self.name}")
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return (
+            f"SegmentationProperty(name={self.name},type={self.type},device={self.device},use_cuda={self.use_cuda},"
+            f"weights={self.weights},weights_full_path={self.weights_full_path},num_classes={self.num_classes},"
+            f"framework={self.framework},debug={self.debug},loader={self.loader},adjust={self.adjust},"
+            f"showType={self.showType},save={self.save},save_dir={self.save_dir},save_label={self.save_label},"
+            f"save_null={self.save_null})")

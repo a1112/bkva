@@ -34,6 +34,11 @@ class ImageLoaderInterface(ABC):
 class ImageFolderLoader(ImageLoaderInterface):
     def __init__(self, property_: BaseProperty, folder_path=None):
         super().__init__(property_)
+        if self.property.loader is None:
+            self.property.loader = {
+                "type": "folder",
+                "path": folder_path
+            }
         self.remove = self.property.loader.get('remove', False)
         self.recursion = self.property.loader.get('recursion', True)
         self.folder_path = folder_path or property_.loader.get('path', None)
@@ -126,8 +131,6 @@ class ImageFolderLoader(ImageLoaderInterface):
 
     def close(self):
         self.stop_loading = True
-        print(self.image_queue.qsize())
-        print(self.delete_queue.qsize())
         self.loader_thread.join()
         self.deleter_thread.join()
 

@@ -2,9 +2,10 @@ import os.path
 
 import BKVisionAlgorithms.classification
 import BKVisionAlgorithms.detection
+import BKVisionAlgorithms.segmentation
 from BKVisionAlgorithms.base import SingModelAll
 from BKVisionAlgorithms.base.property import DetectionProperty, BaseProperty, ImageFolderLoader, \
-    ImageDetectionDirector,DirectorFactoryBase, ImageAdjustBase, ImageAdjustSplit
+    ImageDetectionDirector, ImageAdjustBase, ImageAdjustSplit, DirectorBase
 
 
 def register_model():
@@ -55,7 +56,7 @@ def create_adjust(property_: BaseProperty):
     return ImageAdjustBase(property_)
 
 
-def crate_director(yaml_, loader=None, model=None, adjust=None) -> DirectorFactoryBase:
+def crate_director(yaml_, loader=None, model=None, adjust=None) -> DirectorBase:
     assert yaml_, "yaml_path is required"
     property_ = crate_property(yaml_)
     if not model:

@@ -147,3 +147,26 @@ class ClassificationResult(BaseResult):
     def __str__(self):
         return (f"ClassificationResult(name={self.name},confidence={self.confidence},classes={self.classes}),"
                 f" file={self.file_path}")
+
+
+class SegmentationResult(BaseResult):
+    def __init__(self, property_, result):
+        self._result_ = result
+        super().__init__(property_)
+
+    def save(self, save_path=None):
+        if save_path is None:
+            raise ValueError("save_path is None")
+        save_path = Path(save_path) / Path(self.file_path).name
+        save_path.mkdir(parents=True, exist_ok=True)
+        if os.path.exists(self.file_path):
+            shutil.copy(self.file_path, save_path)
+        else:
+            self.image.save(save_path / Path(self.file_path).name)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return (f"SegmentationResult(result={self._result_}),"
+                f" file={self.file_path}")

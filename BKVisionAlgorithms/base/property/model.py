@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from BKVisionAlgorithms.base.property.property import DetectionProperty, ClassificationProperty
+from BKVisionAlgorithms.base.property.property import DetectionProperty, SegmentationProperty, ClassificationProperty
 
 
 class BaseModel(ABC):
@@ -76,9 +76,49 @@ class BaseClassificationModel(BaseModel):
     """
     names = []
 
+    @abstractmethod
+    def load_model(self):
+        pass
+
+    @abstractmethod
+    def predict(self, frame):
+        pass
+
+    @abstractmethod
+    def resolverResult(self, result, images):
+        pass
+
     def __init__(self, property_: ClassificationProperty, **kwargs):
         """
         Initialize the DetectionInterface object.
         """
         super().__init__(property_, **kwargs)
         self.property: ClassificationProperty
+
+
+class BaseSegmentationModel(BaseModel):
+    """
+    DetectionInterface is an abstract class that defines the interface for
+    detection algorithms. All detection algorithms should inherit from this
+    class.
+    """
+    names = []
+
+    @abstractmethod
+    def load_model(self):
+        pass
+
+    @abstractmethod
+    def predict(self, frame):
+        pass
+
+    @abstractmethod
+    def resolverResult(self, result, images):
+        pass
+
+    def __init__(self, property_, **kwargs):
+        """
+        Initialize the DetectionInterface object.
+        """
+        super().__init__(property_, **kwargs)
+        self.property: SegmentationProperty
