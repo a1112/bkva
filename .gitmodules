@@ -20,3 +20,6 @@
 [submodule "git/Paddle"]
 	path = git/Paddle
 	url = https://github.com/PaddlePaddle/Paddle
+[submodule "git/segmentation/mmsegmentation"]
+	path = git/segmentation/mmsegmentation
+	url = https://github.com/open-mmlab/mmsegmentation
