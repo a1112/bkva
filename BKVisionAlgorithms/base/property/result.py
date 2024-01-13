@@ -1,4 +1,5 @@
 import os
+import random
 import shutil
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -13,6 +14,7 @@ from BKVisionAlgorithms.base.property.property import BaseProperty
 
 class BaseResult(ABC):
     def __init__(self, property_):
+        self.names = property_.names
         self._file_path_ = None
         self.property = property_
         self.property: BaseProperty
@@ -43,17 +45,20 @@ class BaseResult(ABC):
 
 class DetectionResult(BaseResult):
     def __init__(self, property_, result):
+        super().__init__(property_)
         self.drawImage = None
         self._result_ = result
         self.showType = property_.showType
-
-        self.names = None
         self._xyxy_ = None
         self._xywh_ = None
-        super().__init__(property_)
 
     def hasObject(self):
         return len(self.xyxy) > 0
+
+    @property
+    def colors(self):
+        return [(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)) for _ in
+                range(len(self.names))]
 
     @property
     def xywh(self):
@@ -83,7 +88,6 @@ class DetectionResult(BaseResult):
             cv2.namedWindow('Image', cv2.WINDOW_NORMAL)
             if self.drawImage.size[0] < 1000:
                 cv2.resizeWindow('Image', self.drawImage.size[0], self.drawImage.size[1])
-
             cv2.imshow("Image", cv2.cvtColor(np.asarray(self.drawImage), cv2.COLOR_RGB2BGR))
             cv2.waitKey(0)
 
@@ -149,10 +153,21 @@ class ClassificationResult(BaseResult):
                 f" file={self.file_path}")
 
 
-class SegmentationResult(BaseResult):
+class SegmentationResult(DetectionResult):
     def __init__(self, property_, result):
         self._result_ = result
-        super().__init__(property_)
+        super().__init__(property_, result)
+        self._pred_sem_seg_ = None
+
+    @property
+    def pred_sem_seg(self):
+        return self._pred_sem_seg_
+
+    @pred_sem_seg.setter
+    def pred_sem_seg(self, pred_sem_seg):
+        self._pred_sem_seg_ = pred_sem_seg
+
+        # 2d array of size (H, W)
 
     def save(self, save_path=None):
         if save_path is None:
@@ -163,6 +178,50 @@ class SegmentationResult(BaseResult):
             shutil.copy(self.file_path, save_path)
         else:
             self.image.save(save_path / Path(self.file_path).name)
+
+    def show(self):
+        if not self.drawImage:
+            self.drawImage = self._draw_()
+        if self.showType == "pillow":
+            self.drawImage.show()
+        elif self.showType == "cv2":
+            cv2.namedWindow('Image', cv2.WINDOW_NORMAL)
+            if self.drawImage.size[0] < 1000:
+                cv2.resizeWindow('Image', self.drawImage.size[0], self.drawImage.size[1])
+            cv2.imshow("Image", cv2.cvtColor(np.asarray(self.drawImage), cv2.COLOR_RGB2BGR))
+            cv2.waitKey(0)
+
+    def _draw_(self):
+        draw = self.image.copy()
+        num_classes = self._pred_sem_seg_.max() + 1  # 假设 pred 中的最大值代表类别数
+        # 创建RGB图像
+        rgb_image = np.zeros((self._pred_sem_seg_.shape[0], self._pred_sem_seg_.shape[1], 3), dtype=np.uint8)
+        boxes = []
+        for i in range(num_classes):
+            mask = self._pred_sem_seg_ == i  # 这是一个二维的布尔数组
+            contours, _ = cv2.findContours(np.uint8(mask.numpy()*255), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            # 绘制边界框
+            for contour in contours:
+                x, y, w, h = cv2.boundingRect(contour)
+                boxes.append([x, y, x + w, y + h, 1, i])
+
+            rgb_image[mask] = self.colors[i]  # 在这里应用布尔索引
+        # 显示图像
+        self.xyxy = boxes
+
+        combined_image = cv2.addWeighted(rgb_image, 0.5, np.asarray(self.image), 1 - 0.5, 0)
+
+        for box in boxes:
+            cv2.rectangle(combined_image, (box[0], box[1]), (box[2], box[3]), self.colors[box[5]], 2)
+            # cv2.putText(combined_image, f"{self.property.names[box[5]]} {box[4]:.2f}", (box[0], box[1]),
+            #             cv2.FONT_HERSHEY_SIMPLEX, 1, self.colors[box[5]], 2)
+        return Image.fromarray(combined_image)
+
+        # for box in self.xyxy:
+        #     drawImage.rectangle(box[:4], outline=drawColor, width=2)
+        #     drawImage.text((box[0], box[1]), f"{self.property.names[box[5]]} {box[4]:.2f}", fill=drawColor,
+        #                    stroke_width=1, font=ImageFont.truetype("font/simsun.ttc", 20))
+        # return draw
 
     def __repr__(self):
         return self.__str__()
