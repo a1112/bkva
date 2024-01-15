@@ -1,0 +1,36 @@
+# Encoding: utf-8
+# Function: 海康CA-060-GM
+
+
+name: Hikvision #  Hikvision 海康机器人 CCD
+configFile: demo/hikCA-060-GM.yaml # 相机配置文件路径
+
+
+selectType: ip # 选择相机的方式  ip 为IP地址  serial 为串口号 index 为相机索引号
+ip: 192.168.3.145
+mac: 00:00:C4:2F:90:F3:CB:83
+
+
+
+
+useOtherConfig: false # 是否使用其他配置文件
+cameraConfig:   #  Camera 其他 相机配置
+    exposureTime: 1000 # 曝光时间
+    gain: 20 # 增益
+    gamma: 1 # 伽马
+    whiteBalance: 0 # 白平衡
+    blackLevel: 0 # 黑电平
+    saturation: 0 # 饱和度
+    sharpness: 0 # 锐度
+    hue: 0 # 色调
+    contrast: 0 # 对比度
+    brightness: 0 # 亮度
+    frameRate: 30 # 帧率
+    triggerMode: 0 # 触发模式
+    triggerSource: 0 # 触发源
+    triggerActivation: 0 # 触发激活
+    triggerDelay: 0 # 触发延时
+    triggerDelayEnable: 0 # 触发延时使能
+    triggerSoftware: 0 # 软触发
+    triggerOverlap: 0 # 触发重叠
+    triggerFilter: 0 # 触发滤波

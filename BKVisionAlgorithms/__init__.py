@@ -8,10 +8,6 @@ from BKVisionAlgorithms.base.property import DetectionProperty, BaseProperty, Im
     ImageDetectionDirector, ImageAdjustBase, ImageAdjustSplit, DirectorBase
 
 
-def register_model():
-    pass
-
-
 def crate_property(yaml_):
     if isinstance(yaml_, str):
         property_ = BaseProperty(yaml_)

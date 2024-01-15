@@ -126,6 +126,14 @@ class DetectionResult(BaseResult):
         if self.property.save_label and self.hasObject():
             self.saveXml(save_url.parent)
 
+    def crop_images(self):
+        if not self.xyxy:
+            return []
+        images = []
+        for box in self.xyxy:
+            images.append(self.image.crop(box[:4]))
+        return images
+
 
 class ClassificationResult(BaseResult):
 
@@ -165,9 +173,17 @@ class SegmentationResult(DetectionResult):
 
     @pred_sem_seg.setter
     def pred_sem_seg(self, pred_sem_seg):
+        boxes = []
         self._pred_sem_seg_ = pred_sem_seg
-
-        # 2d array of size (H, W)
+        for i in range(self.property.num_classes):
+            mask = self._pred_sem_seg_ == i  # 这是一个二维的布尔数组
+            contours, _ = cv2.findContours(np.uint8(mask.numpy()*255), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            # 绘制边界框
+            for contour in contours:
+                x, y, w, h = cv2.boundingRect(contour)
+                boxes.append([x, y, x + w, y + h, 1, i])
+        # 显示图像
+        self.xyxy = boxes
 
     def save(self, save_path=None):
         if save_path is None:
@@ -192,23 +208,19 @@ class SegmentationResult(DetectionResult):
             cv2.waitKey(0)
 
     def _draw_(self):
-        draw = self.image.copy()
-        num_classes = self._pred_sem_seg_.max() + 1  # 假设 pred 中的最大值代表类别数
         # 创建RGB图像
         rgb_image = np.zeros((self._pred_sem_seg_.shape[0], self._pred_sem_seg_.shape[1], 3), dtype=np.uint8)
         boxes = []
-        for i in range(num_classes):
+        for i in range(self.property.num_classes):
             mask = self._pred_sem_seg_ == i  # 这是一个二维的布尔数组
             contours, _ = cv2.findContours(np.uint8(mask.numpy()*255), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             # 绘制边界框
             for contour in contours:
                 x, y, w, h = cv2.boundingRect(contour)
                 boxes.append([x, y, x + w, y + h, 1, i])
-
             rgb_image[mask] = self.colors[i]  # 在这里应用布尔索引
         # 显示图像
         self.xyxy = boxes
-
         combined_image = cv2.addWeighted(rgb_image, 0.5, np.asarray(self.image), 1 - 0.5, 0)
 
         for box in boxes:

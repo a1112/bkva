@@ -11,6 +11,7 @@ from PIL import Image, UnidentifiedImageError
 
 from BKVisionAlgorithms.base.property.property import BaseProperty
 
+from BKVisionCamera import crate_capter
 
 class ImageLoaderInterface(ABC):
     def __init__(self, property_: BaseProperty):
@@ -137,17 +138,17 @@ class ImageFolderLoader(ImageLoaderInterface):
 
 class CameraLoader(ImageLoaderInterface):
     def __next__(self):
-        pass
+        "camera",self.capture.getFrame()
 
     def close(self):
-        pass
+        self.capture.release()
 
     def __iter__(self):
-        pass
+        return self
 
-    def __init__(self):
-        super().__init__()
-        ...
+    def __init__(self,property_:BaseProperty,camera_property):
+        super().__init__(property_)
+        self.capture = crate_capter(camera_property)
 
 
 class DatabaseLoader(ImageLoaderInterface):
