@@ -89,7 +89,7 @@ class DetectionResult(BaseResult):
             if self.drawImage.size[0] < 1000:
                 cv2.resizeWindow('Image', self.drawImage.size[0], self.drawImage.size[1])
             cv2.imshow("Image", cv2.cvtColor(np.asarray(self.drawImage), cv2.COLOR_RGB2BGR))
-            cv2.waitKey(0)
+            cv2.waitKey(1)
 
     def _draw_(self):
         draw = self.image.copy()

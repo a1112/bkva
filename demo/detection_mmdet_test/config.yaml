@@ -91,7 +91,7 @@ names:
     79: toothbrush
 
 
-device: cuda:0           # cuda device, i.e. 0 or 0,1,2,3 or cpu
-batch-size: 32      # inference batch size
+device: 0           # cuda device
+batch-size: 1      # inference batch size
 
 debug: true        # debug mode

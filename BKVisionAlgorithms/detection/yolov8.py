@@ -55,5 +55,4 @@ class YOLOv8(BaseDetectionModel):
             res.image = result_.orig_img
             res.xywh = boxes
             resultList.append(res)
-        print(resultList)
         return resultList

@@ -77,7 +77,6 @@ class TimmFrame(BaseClassificationModel):
             largest_n = heapq.nlargest(n, enumerate(data), key=lambda x: x[1])
             # 转换成【索引，值】格式的列表
             index_value_pairs = [[index, value] for index, value in largest_n]
-            print(index_value_pairs)
             res.append(index_value_pairs)
         return res
 

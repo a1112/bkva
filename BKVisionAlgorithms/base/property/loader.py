@@ -5,6 +5,7 @@ import threading
 import time
 from abc import ABC, abstractmethod
 
+import cv2
 import filetype
 import numpy as np
 from PIL import Image, UnidentifiedImageError
@@ -39,6 +40,11 @@ class ImageFolderLoader(ImageLoaderInterface):
             self.property.loader = {
                 "type": "folder",
                 "path": folder_path
+            }
+        elif isinstance(self.property.loader, str):
+            self.property.loader = {
+                "type": "folder",
+                "path": self.property.loader
             }
         self.remove = self.property.loader.get('remove', False)
         self.recursion = self.property.loader.get('recursion', True)
@@ -138,7 +144,9 @@ class ImageFolderLoader(ImageLoaderInterface):
 
 class CameraLoader(ImageLoaderInterface):
     def __next__(self):
-        "camera",self.capture.getFrame()
+        grayImage = self.capture.getFrame()
+        rbgImage = cv2.cvtColor(grayImage, cv2.COLOR_GRAY2RGB)
+        return "camera",rbgImage
 
     def close(self):
         self.capture.release()
