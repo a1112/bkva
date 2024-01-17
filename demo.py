@@ -1,5 +1,4 @@
 import argparse
-
 from tqdm import tqdm
 
 from BKVisionAlgorithms import crate_director
