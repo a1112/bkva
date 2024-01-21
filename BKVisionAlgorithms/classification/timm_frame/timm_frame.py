@@ -1,5 +1,4 @@
 import heapq
-import shutil
 from pathlib import WindowsPath, Path
 
 import numpy as np
@@ -18,7 +17,7 @@ class TimmFrame(BaseClassificationModel):
         resultList = []
         for maxN, image in zip(result, images):
             max_ = maxN[0]
-            res = ClassificationResult(name=self.property.names[max_[0]], confidence=max_[1], classes=max_[0])
+            res = ClassificationResult(self.property,name=self.property.names[max_[0]], confidence=max_[1], classes=max_[0])
             res.image = image
             resultList.append(res)
         return resultList
@@ -55,7 +54,8 @@ class TimmFrame(BaseClassificationModel):
                                   num_classes=self.property.num_classes, pretrained=False)
         model.eval()
         if torch.cuda.is_available() and self.property.use_cuda:
-            self.model = self.model.cuda()
+            model = model.cuda()
+        return model
 
     def predict(self, item):
         return self.resolverResult(self._predictImage_(item), item)

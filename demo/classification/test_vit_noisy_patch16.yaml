@@ -1,0 +1,12 @@
+#--encoding:utf-8--
+#  type: classification
+
+framework: timm
+name: vit_noisy_patch16_224
+weights: D:\Project\BKVison\bkvt\pytorch-image-models\output\train\20240120-021308-vit_noisy_patch16_224-224\checkpoint-36.pth.tar
+names: E:\clfData\data    # dataset labels
+
+num_classes: 1000              # number of classes
+device: cuda:0          # cuda device, i.e. 0 or 0,1,2,3 or cpu
+
+debug: true        # debug mode
