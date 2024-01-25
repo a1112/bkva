@@ -13,6 +13,7 @@ from BKVisionAlgorithms.base.property import BaseClassificationModel, Classifica
 
 @register()
 class TimmFrame(BaseClassificationModel):
+
     def resolverResult(self, result, images):
         resultList = []
         for maxN, image in zip(result, images):
@@ -32,12 +33,23 @@ class TimmFrame(BaseClassificationModel):
         self.model: timm.models.efficientnet.EfficientNet
 
         config = resolve_data_config({}, model=self.model)
+        if self.property.in_chans == 1:
+            config ["mean"] = [0.5]  # 示例均值，针对单通道
+            config["std"] = [0.5]  # 示例标准差，针对单通道
+            config["input_size"] = list(config["input_size"])
+            config["input_size"][0] = self.property.in_chans
+        print(config)
         self.transform = create_transform(**config)
 
     def ImageToTensor(self, image):
+        # if isinstance(image, Image.Image):
+        #     return self.transform(image.convert('RGB'))
+        # return self.ImageToTensor(Image.fromarray(image, mode="RGB"))
+        # print(image)
+
         if isinstance(image, Image.Image):
-            return self.transform(image.convert('RGB'))
-        return self.ImageToTensor(Image.fromarray(image, mode="RGB"))
+            return self.transform(image)
+        return self.ImageToTensor(Image.fromarray(image))
 
     def getTensor(self, item, isRoot=True):
         if isinstance(item, (str, WindowsPath)):
@@ -50,7 +62,7 @@ class TimmFrame(BaseClassificationModel):
             return torch.stack([self.getTensor(item_item, isRoot=False) for item_item in item])
 
     def load_model(self):
-        model = timm.create_model(self.property.name, checkpoint_path=self.property.weights_full_path,
+        model = timm.create_model(self.property.name, checkpoint_path=self.property.weights_full_path,in_chans=self.property.in_chans,
                                   num_classes=self.property.num_classes, pretrained=False)
         model.eval()
         if torch.cuda.is_available() and self.property.use_cuda:
@@ -84,6 +96,8 @@ class TimmFrame(BaseClassificationModel):
     def get_model_list():
         return timm.list_models("*")
 
+    def toTorchScript(self):
+        return torch.jit.script(self.model)
 
 
 if __name__=="__main__":

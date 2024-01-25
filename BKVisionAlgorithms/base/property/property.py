@@ -77,7 +77,7 @@ class BaseProperty(object):
         self.save_label = self.yaml_dict.get('save-label', False)
         self.save_null = self.yaml_dict.get('save-null', True)
         self.recursion = self.yaml_dict.get('recursion', True)
-
+        self.in_chans = self.yaml_dict.get("in_chans",3)
     def __repr__(self):
         return self.__str__()
 

@@ -2,11 +2,11 @@
 #  type: classification
 
 framework: timm
-name: maxvit_base_tf_384.in21k_ft_in1k
-weights: D:\Project\BKVison\bkvt\pytorch-image-models\output\train\20240121-133535-maxvit_base_tf_384_in21k_ft_in1k-384\model_best.pth.tar
+name: resnet34
+weights: D:\Project\BKVison\bkvt\pytorch-image-models\output\train\20240123-182913-resnet34-224\model_best.pth.tar
 names: E:\clfData\data    # dataset labels
 
 num_classes: 1000              # number of classes
 device: cuda:0          # cuda device, i.e. 0 or 0,1,2,3 or cpu
-
+in_chans: 3
 debug: true        # debug mode

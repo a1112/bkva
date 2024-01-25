@@ -77,6 +77,10 @@ class ImageFolderLoader(ImageLoaderInterface):
             for file in self._get_image_files(self.folder_path):
                 try:
                     image_ = Image.open(file)
+                    if self.property.in_chans==1:
+                        image_ = image_.convert('L')
+                    else:
+                        image_ = image_.convert('RGB')
                     image = image_.copy()
                     image_.close()
 

@@ -5,7 +5,7 @@ import BKVisionAlgorithms.detection
 import BKVisionAlgorithms.segmentation
 from BKVisionAlgorithms.base import SingModelAll
 from BKVisionAlgorithms.base.property import DetectionProperty, BaseProperty, ImageFolderLoader, \
-    ImageDetectionDirector, ImageAdjustBase, ImageAdjustSplit, DirectorBase
+    ImageDetectionDirector, ImageAdjustBase, ImageAdjustSplit, DirectorBase,BaseModel
 
 
 def crate_property(yaml_):
@@ -18,7 +18,7 @@ def crate_property(yaml_):
     return property_
 
 
-def crate_model(property_: BaseProperty):
+def crate_model(property_: BaseProperty) -> BaseModel:
     models = SingModelAll()
     return models.create(property_)
 

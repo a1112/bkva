@@ -28,6 +28,9 @@ class BaseModel(ABC):
     def get_model_list():
         return BaseModel.names
 
+    def toTorchScript(self):
+        ...
+
 
 class BaseDetectionModel(BaseModel):
     """
@@ -94,6 +97,7 @@ class BaseClassificationModel(BaseModel):
         """
         super().__init__(property_, **kwargs)
         self.property: ClassificationProperty
+
 
 
 class BaseSegmentationModel(BaseModel):
