@@ -1,0 +1,3 @@
+type: train
+framework: timm
+config: trainConfig2.yaml

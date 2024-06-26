@@ -63,3 +63,14 @@ def crate_director(yaml_, loader=None, model=None, adjust=None) -> DirectorBase:
         adjust = create_adjust(property_)
     assert loader, "loader is required"
     return ImageDetectionDirector(loader, model, adjust)
+
+
+def getRootList():
+    return {
+        "trainRootList": ["分类", "检测", "分割"],
+        "frameList": {
+            0: ["timm"],
+            1: ["yolov5"],
+            2: ["unet"]
+        }
+    }

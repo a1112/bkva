@@ -19,13 +19,13 @@ def get_boxes(boxes):
 
 
 @register()
-class YOLOv8(BaseDetectionModel):
+class YOLOv9(BaseDetectionModel):
     """
     YOLOv5 Class as part of the Strategy design pattern.
 
     - External Usage documentation: U{https://en.wikipedia.org/wiki/Strategy_pattern}
     """
-    names = ["yolov8", "yolov8n", "yolov8s"]
+    names = ["yolov9", "yolov9s", "yolov9e"]
 
     def __init__(self, property_: DetectionProperty, **kwargs):
         super().__init__(property_, **kwargs)

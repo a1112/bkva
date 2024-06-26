@@ -7,7 +7,7 @@ from BKVisionAlgorithms import crate_model
 from BKVisionAlgorithms.base.property import ClassificationProperty, DetectionResult, ImageFolderLoader, \
     ImageDetectionDirector, BaseResult, ClassificationResult
 
-property = ClassificationProperty("demo/classification/test_resnet.yaml")
+property = ClassificationProperty("demo/test/classification/test_resnet.yaml")
 print(property.names)
 classificationModel = crate_model(property)
 imageFolderLoader = ImageFolderLoader(property, folder_path=r"E:\clfData\data")  # 删除原来的文件

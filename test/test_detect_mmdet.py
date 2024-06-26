@@ -9,9 +9,9 @@ from BKVisionAlgorithms.base.property import DetectionProperty, DetectionResult,
 
 class TestMMDetDetection:
     def test_detection_mmdet(self):
-        property = DetectionProperty("../demo/detection_mmdet_test")
+        property = DetectionProperty("../demo/test/detection_mmdet_test")
         detectionModel = crate_model(property)
-        imageFolderLoader = ImageFolderLoader(property, r"D:\Project\LGSerer\API\utils\alg\demo\testFolder\test2017")
+        imageFolderLoader = ImageFolderLoader(property, r"D:\Project\BKVison\bkva\demo\testFolder\test2017")
         director = ImageDetectionDirector(imageFolderLoader, detectionModel)
         for results in tqdm(director):
             for result in results:
@@ -20,9 +20,9 @@ class TestMMDetDetection:
                 result.show()
 
     def test_detection_mmdet_camera(self):
-        property_ = DetectionProperty("../demo/detection_mmdet_test")
+        property_ = DetectionProperty("../demo/test/detection_mmdet_test")
         detectionModel = crate_model(property_)
-        cameraLoader = CameraLoader(property_, "../demo/detection_mmdet_test/HikCA-060-GM.yaml")
+        cameraLoader = CameraLoader(property_, "../demo/test/detection_mmdet_test/HikCA-060-GM.yaml")
         director = ImageDetectionDirector(cameraLoader, detectionModel)
         with cameraLoader.capture:
             for results in tqdm(director):
